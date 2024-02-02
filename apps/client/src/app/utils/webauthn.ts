@@ -2,7 +2,7 @@ import { utils } from '@passwordless-id/webauthn';
 
 export const buildCredential = (
   challenge: string,
-  username: string
+  username: string,
 ): CredentialCreationOptions => ({
   publicKey: {
     // Challenge that the authenticator must sign
@@ -56,7 +56,7 @@ export const buildCredential = (
 });
 
 export const buildGetCredential = (
-  challenge: string
+  challenge: string,
 ): CredentialRequestOptions => ({
   publicKey: {
     // Challenge that the authenticator must sign
@@ -96,7 +96,7 @@ const getAlgorithmName = (algorithmNumber: number) => {
 export const encodeCredential = (
   id: string,
   username: string,
-  response: AuthenticatorAttestationResponse
+  response: AuthenticatorAttestationResponse,
 ) =>
   JSON.stringify({
     credential: {
@@ -111,7 +111,7 @@ export const encodeCredential = (
 
 export const encodeGetCredential = (
   id: string,
-  response: AuthenticatorAssertionResponse
+  response: AuthenticatorAssertionResponse,
 ) =>
   JSON.stringify({
     credentialId: id,

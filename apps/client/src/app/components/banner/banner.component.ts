@@ -18,6 +18,6 @@ import { AuthService } from '../../services/auth.service';
 export class BannerComponent {
   user = toSignal(inject(AuthService).user$);
   bannerIcon = computed(() =>
-    this.user() ? faLockKeyholeOpen : faLockKeyhole
+    this.user() ? faLockKeyholeOpen : faLockKeyhole,
   );
 }

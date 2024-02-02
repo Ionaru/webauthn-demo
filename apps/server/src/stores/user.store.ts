@@ -25,7 +25,7 @@ class UserStore {
 
   getUser(credentialId: string): User | undefined {
     return this.#users.find((user) =>
-      user.credentials.some((credential) => credential.id === credentialId)
+      user.credentials.some((credential) => credential.id === credentialId),
     );
   }
 

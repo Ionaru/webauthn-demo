@@ -23,7 +23,7 @@ export class AppResolver {
   @Mutation(() => Boolean)
   async loginUser(
     @Args() queryArguments: AuthArguments,
-    @Context() { req: { session } }: { req: Request }
+    @Context() { req: { session } }: { req: Request },
   ) {
     const result = await this.appService.loginUser(queryArguments.data);
     if (result) {
@@ -36,7 +36,7 @@ export class AppResolver {
   @Mutation(() => Boolean)
   addPasskey(
     @Args() queryArguments: AuthArguments,
-    @Context() { req: { session } }: { req: Request }
+    @Context() { req: { session } }: { req: Request },
   ) {
     if (!session.userId) {
       throw new Error('User not logged in');

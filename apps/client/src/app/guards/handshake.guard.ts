@@ -16,6 +16,6 @@ export const handhake: CanActivateFn = () => {
           console.log('handhake done');
           done = true;
         }),
-        map(() => true)
+        map(() => true),
       );
 };

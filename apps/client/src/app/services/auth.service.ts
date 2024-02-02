@@ -31,7 +31,7 @@ export class AuthService {
           console.log('handshake user:', result.data.session.user);
           this.#userSubject.next(result.data.session.user);
         }),
-        tap(() => console.log('End handshake!', this.#userSubject.value))
+        tap(() => console.log('End handshake!', this.#userSubject.value)),
       );
   }
 
@@ -48,7 +48,7 @@ export class AuthService {
       .pipe(
         tap((result) => console.log('getChallenge result:', result)),
         map((result) => result.data?.createChallenge),
-        tap(() => console.log('End getChallenge!'))
+        tap(() => console.log('End getChallenge!')),
       );
   }
 
@@ -76,7 +76,7 @@ export class AuthService {
             this.#router.navigate(['/secure']);
           }
         }),
-        tap(() => console.log('End login!'))
+        tap(() => console.log('End login!')),
       );
   }
 
@@ -103,7 +103,7 @@ export class AuthService {
             this.#router.navigate(['/home']);
           }
         }),
-        tap(() => console.log('End register!'))
+        tap(() => console.log('End register!')),
       );
   }
 
@@ -125,7 +125,7 @@ export class AuthService {
       .pipe(
         tap((result) => console.log('Add result:', result)),
         map((result) => result.data?.addPasskey),
-        tap(() => console.log('End add passkey!'))
+        tap(() => console.log('End add passkey!')),
       );
   }
 
@@ -140,7 +140,7 @@ export class AuthService {
       .pipe(
         tap(() => this.#userSubject.next(null)),
         switchMap(() => this.#router.navigate(['/'])),
-        tap(() => console.log('Logout done!'))
+        tap(() => console.log('Logout done!')),
       );
   }
 }

@@ -34,7 +34,7 @@ export class AppService {
     }
 
     const matchingCredential = matchingUser.credentials.find(
-      (credential) => credential.id === authentication.credentialId
+      (credential) => credential.id === authentication.credentialId,
     );
     if (!matchingCredential) {
       return;
@@ -66,7 +66,7 @@ export class AppService {
 
     userStore.createUser(
       registrationParsed.username,
-      registrationParsed.credential
+      registrationParsed.credential,
     );
 
     return true;

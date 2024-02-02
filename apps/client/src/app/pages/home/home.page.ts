@@ -41,7 +41,7 @@ export class HomePage {
       }
 
       const credential = (await navigator.credentials.get(
-        buildGetCredential(challenge)
+        buildGetCredential(challenge),
       )) as PublicKeyCredential | null;
       if (!credential) {
         return;

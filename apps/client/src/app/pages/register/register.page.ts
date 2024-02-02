@@ -56,7 +56,7 @@ export class RegisterPage {
 
       const username = this.displayNameControl.value || this.placeholderName;
       const credential = (await navigator.credentials.create(
-        buildCredential(challenge, username)
+        buildCredential(challenge, username),
       )) as PublicKeyCredential | null;
       if (!credential) {
         return;

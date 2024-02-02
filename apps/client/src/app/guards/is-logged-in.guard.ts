@@ -9,7 +9,7 @@ export const isLoggedIn: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
   return authService.user$.pipe(
-    map((user) => (user ? true : router.parseUrl('/')))
+    map((user) => (user ? true : router.parseUrl('/'))),
   );
 };
 
@@ -18,6 +18,6 @@ export const isLoggoutOut: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
   return authService.user$.pipe(
-    map((user) => (user ? router.parseUrl('/secure') : true))
+    map((user) => (user ? router.parseUrl('/secure') : true)),
   );
 };

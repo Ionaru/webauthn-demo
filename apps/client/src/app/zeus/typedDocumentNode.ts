@@ -17,14 +17,14 @@ export const typedGql =
   <
     O extends keyof typeof Ops,
     SCLR extends ScalarDefinition,
-    R extends keyof ValueTypes = GenericOperation<O>
+    R extends keyof ValueTypes = GenericOperation<O>,
   >(
     operation: O,
-    graphqlOptions?: ThunderGraphQLOptions<SCLR>
+    graphqlOptions?: ThunderGraphQLOptions<SCLR>,
   ) =>
   <Z extends ValueTypes[R]>(
     o: (Z & ValueTypes[R]) | ValueTypes[R],
-    ops?: OperationOptions
+    ops?: OperationOptions,
   ) => {
     const string_ = Zeus(operation, o, {
       operationOptions: ops,
