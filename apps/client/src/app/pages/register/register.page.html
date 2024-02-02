@@ -1,0 +1,42 @@
+<app-page>
+  <app-banner />
+  <app-login-box>
+    @if (isLoading()) {
+    <div class="flex items-center justify-center">
+      <app-loader />
+    </div>
+    } @else {
+    <h1 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+      Create a new account
+    </h1>
+    <form class="space-y-4" (ngSubmit)="register()">
+      <div>
+        <label
+          for="display-name"
+          class="block mb-2 text-sm font-medium text-gray-900"
+        >
+          A name for your account (optional)
+        </label>
+        <input
+          [formControl]="displayNameControl"
+          type="text"
+          name="display-name"
+          id="display-name"
+          class="bg-gray-50 border border-gray-300 text-gray-900 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+          [placeholder]="placeholderName"
+        />
+      </div>
+      <button app-button type="submit">
+        <fa-icon [icon]="registerIcon" [fixedWidth]="true" />
+        Sign up
+      </button>
+      <p class="text-sm font-light text-gray-500">
+        Already have an account?
+        <a routerLink="/" class="font-medium text-primary-600 hover:underline">
+          Sign in
+        </a>
+      </p>
+    </form>
+    }
+  </app-login-box>
+</app-page>

@@ -1,0 +1,27 @@
+<app-page>
+  <app-banner />
+  <app-login-box>
+    @if (isLoading()) {
+    <div class="flex items-center justify-center">
+      <app-loader />
+    </div>
+    } @else {
+    <h1 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+      Sign in to your account
+    </h1>
+    <button class="space-y-6" app-button (click)="login()">
+      <fa-icon [icon]="loginIcon" [fixedWidth]="true" />
+      Sign in
+    </button>
+    <p class="text-sm font-light text-gray-500">
+      Don’t have an account yet?
+      <a
+        routerLink="/register"
+        class="font-medium text-primary-600 hover:underline"
+      >
+        Sign up
+      </a>
+    </p>
+    }
+  </app-login-box>
+</app-page>

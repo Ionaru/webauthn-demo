@@ -1,0 +1,20 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Mutation {
+  addPasskey(data: String!): Boolean!
+  createChallenge: String!
+  loginUser(data: String!): Boolean!
+  logoutUser: Boolean!
+  registerUser(data: String!): Boolean!
+}
+
+type Query {
+  session: SessionDTO!
+}
+
+type SessionDTO {
+  user: String
+  userId: String
+}

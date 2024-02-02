@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nx"],
+  "plugins": ["@nx", "@typescript-eslint", "import", "sonarjs", "unicorn"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -23,8 +23,23 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript"],
-      "rules": {}
+      "extends": [
+        "plugin:@nx/typescript",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:sonarjs/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
+        "plugin:unicorn/recommended",
+        "prettier"
+      ],
+      "rules": {
+        "import/no-unresolved": "off",
+        "import/extensions": "off",
+        "unicorn/no-null": "off",
+        "unicorn/prefer-top-level-await": "off",
+        "unicorn/consistent-function-scoping": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
