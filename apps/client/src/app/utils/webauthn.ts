@@ -6,7 +6,7 @@ export const buildCredential = (
 ): CredentialCreationOptions => ({
   publicKey: {
     // Challenge that the authenticator must sign
-    challenge: Uint8Array.from(challenge, (c) => c.codePointAt(0)!),
+    challenge: utils.toBuffer(challenge),
 
     // Information about relying party
     rp: {
@@ -45,7 +45,7 @@ export const buildCredential = (
     // Info about the user that is trying to register, none of this is sent to the server
     user: {
       // A unique ID for the user record in the authenticator device
-      id: Uint8Array.from(crypto.randomUUID(), (c) => c.codePointAt(0)!),
+      id: utils.toBuffer(crypto.randomUUID()),
       // A Duo of name fields for the user record in the authenticator device
       // Most authenticator devices will display these to the user
       // UI will be simplified when both are the same
@@ -60,13 +60,13 @@ export const buildGetCredential = (
 ): CredentialRequestOptions => ({
   publicKey: {
     // Challenge that the authenticator must sign
-    challenge: Uint8Array.from(challenge, (c) => c.codePointAt(0)!),
+    challenge: utils.toBuffer(challenge),
 
     // The ID of the relying party, will be validated on the server
     // Also acts as the "scope" of the credential
     rpId: window.location.hostname,
 
-    // Specify specific users that are allowed to authenticate
+    // Specify specific credentials that are allowed to authenticate
     // Useful for 2FA
     // Or leave empty to allow any user
     allowCredentials: [],
