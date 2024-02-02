@@ -1,17 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
-import { PageComponent } from '../../components/page/page.component';
-import { BannerComponent } from '../../components/banner/banner.component';
-import { LoginBoxComponent } from '../../components/login-box/login-box.component';
-import { RouterLink } from '@angular/router';
-import { ButtonComponent } from '../../components/button/button.component';
-import { faKeySkeleton } from '@fortawesome/sharp-solid-svg-icons';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { LoaderComponent } from '../../components/loader/loader.component';
-import { AuthService } from '../../services/auth.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
-import { buildCredential, encodeCredential } from '../../utils/webauthn';
+import { RouterLink } from '@angular/router';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faKeySkeleton } from '@fortawesome/sharp-solid-svg-icons';
 import { firstValueFrom } from 'rxjs';
+import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
+
+import { BannerComponent } from '../../components/banner/banner.component';
+import { ButtonComponent } from '../../components/button/button.component';
+import { LoaderComponent } from '../../components/loader/loader.component';
+import { LoginBoxComponent } from '../../components/login-box/login-box.component';
+import { PageComponent } from '../../components/page/page.component';
+import { AuthService } from '../../services/auth.service';
+import { buildCredential, encodeCredential } from '../../utils/webauthn';
 
 @Component({
   standalone: true,

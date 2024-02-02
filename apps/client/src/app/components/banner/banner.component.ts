@@ -1,12 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faLockKeyhole,
   faLockKeyholeOpen,
 } from '@fortawesome/sharp-solid-svg-icons';
+
 import { AuthService } from '../../services/auth.service';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-banner',

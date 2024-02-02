@@ -28,6 +28,13 @@ class UserStore {
       user.credentials.some((credential) => credential.id === credentialId)
     );
   }
+
+  addCredential(userId: string, credential: Credential) {
+    const user = this.#users.find((user) => user.id === userId);
+    if (user) {
+      user.credentials.push(credential);
+    }
+  }
 }
 
 export const userStore = new UserStore();

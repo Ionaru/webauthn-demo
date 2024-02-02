@@ -1,7 +1,8 @@
-import { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { CanActivateFn } from '@angular/router';
 import { map, of, tap } from 'rxjs';
+
+import { AuthService } from '../services/auth.service';
 
 let done = false;
 

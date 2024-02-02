@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
+import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
+
 import { typedGql } from '../zeus/typedDocumentNode';
 
 @Injectable({
@@ -103,6 +104,28 @@ export class AuthService {
           }
         }),
         tap(() => console.log('End register!'))
+      );
+  }
+
+  addPasskey$(credential: string) {
+    console.log('Start add passkey!');
+    return this.#apollo
+      .mutate({
+        fetchPolicy: 'no-cache',
+        useMutationLoading: false,
+        mutation: typedGql('mutation')({
+          addPasskey: [
+            {
+              data: credential,
+            },
+            true,
+          ],
+        }),
+      })
+      .pipe(
+        tap((result) => console.log('Add result:', result)),
+        map((result) => result.data?.addPasskey),
+        tap(() => console.log('End add passkey!'))
       );
   }
 

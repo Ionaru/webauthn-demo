@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-
-import { AppService } from './app.service';
-import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
 import { SessionModule } from 'nestjs-session';
+
 import { AppResolver } from './app.resolver';
+import { AppService } from './app.service';
 
 @Module({
   imports: [

@@ -1,10 +1,11 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nx", "@typescript-eslint", "import", "sonarjs", "unicorn"],
+  "plugins": ["@nx"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "extends": ["prettier"],
       "rules": {
         "@nx/enforce-module-boundaries": [
           "error",
@@ -23,22 +24,21 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": [
-        "plugin:@nx/typescript",
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:sonarjs/recommended",
-        "plugin:import/recommended",
-        "plugin:import/typescript",
-        "plugin:unicorn/recommended",
-        "prettier"
-      ],
+      "extends": ["plugin:@nx/typescript", "@ionaru", "prettier"],
       "rules": {
-        "import/no-unresolved": "off",
+        "@typescript-eslint/dot-notation": "warn",
+        "@typescript-eslint/explicit-member-accessibility": "off",
+        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/no-shadow": "off",
+        "dot-notation": "off",
         "import/extensions": "off",
+        "import/no-unresolved": "off",
+        "max-classes-per-file": "off",
+        "no-console": "off",
+        "sort-keys": "off",
+        "unicorn/consistent-function-scoping": "off",
         "unicorn/no-null": "off",
-        "unicorn/prefer-top-level-await": "off",
-        "unicorn/consistent-function-scoping": "off"
+        "unicorn/prefer-top-level-await": "off"
       }
     },
     {

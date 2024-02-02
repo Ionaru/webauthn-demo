@@ -1,14 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
-import { PageComponent } from '../../components/page/page.component';
-import { ButtonComponent } from '../../components/button/button.component';
-import { BannerComponent } from '../../components/banner/banner.component';
-import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faKey } from '@fortawesome/sharp-solid-svg-icons';
-import { LoaderComponent } from '../../components/loader/loader.component';
-import { AuthService } from '../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
+
+import { BannerComponent } from '../../components/banner/banner.component';
+import { ButtonComponent } from '../../components/button/button.component';
+import { LoaderComponent } from '../../components/loader/loader.component';
+import { LoginBoxComponent } from '../../components/login-box/login-box.component';
+import { PageComponent } from '../../components/page/page.component';
+import { AuthService } from '../../services/auth.service';
 import { buildGetCredential, encodeGetCredential } from '../../utils/webauthn';
 
 @Component({

@@ -1,8 +1,10 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 import { bindCallback, map } from 'rxjs';
-import { AppService } from './app.service';
+
 import { AuthArguments as AuthArguments, SessionDTO } from '../types/dto';
+
+import { AppService } from './app.service';
 
 @Resolver()
 export class AppResolver {
@@ -36,11 +38,11 @@ export class AppResolver {
     @Args() queryArguments: AuthArguments,
     @Context() { req: { session } }: { req: Request }
   ) {
-    if (!session.user) {
+    if (!session.userId) {
       throw new Error('User not logged in');
     }
 
-    return this.appService.addPasskey(session.user, queryArguments.data);
+    return this.appService.addPasskey(session.userId, queryArguments.data);
   }
 
   @Mutation(() => Boolean)

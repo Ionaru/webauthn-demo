@@ -1,7 +1,6 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { appRoutes } from './app.routes';
-import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ApolloClientOptions, InMemoryCache } from '@apollo/client/core';
 import {
   APOLLO_FLAGS,
@@ -10,6 +9,8 @@ import {
   Flags,
 } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
+
+import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [

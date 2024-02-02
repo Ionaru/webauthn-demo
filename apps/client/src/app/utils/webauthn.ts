@@ -79,8 +79,8 @@ export const buildGetCredential = (
   },
 });
 
-function getAlgoName(number_: number) {
-  switch (number_) {
+const getAlgorithmName = (algorithmNumber: number) => {
+  switch (algorithmNumber) {
     case -7: {
       return 'ES256';
     }
@@ -88,10 +88,10 @@ function getAlgoName(number_: number) {
       return 'RS256';
     }
     default: {
-      throw new Error(`Unknown algorithm code: ${number_}`);
+      throw new Error(`Unknown algorithm code: ${algorithmNumber}`);
     }
   }
-}
+};
 
 export const encodeCredential = (
   id: string,
@@ -102,7 +102,7 @@ export const encodeCredential = (
     credential: {
       id,
       publicKey: utils.toBase64url(response.getPublicKey()!),
-      algorithm: getAlgoName(response.getPublicKeyAlgorithm()!),
+      algorithm: getAlgorithmName(response.getPublicKeyAlgorithm()!),
     },
     authenticatorData: utils.toBase64url(response.getAuthenticatorData()),
     clientData: utils.toBase64url(response.clientDataJSON),
