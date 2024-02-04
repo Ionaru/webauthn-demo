@@ -100,7 +100,7 @@ export class AuthService {
         map((result) => result.data?.registerUser),
         tap((result) => {
           if (result) {
-            this.#router.navigate(['/home']);
+            this.#router.navigate(['/']);
           }
         }),
         tap(() => console.log('End register!')),
