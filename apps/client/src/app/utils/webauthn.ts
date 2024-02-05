@@ -32,7 +32,7 @@ export const buildCredential = (
     authenticatorSelection: {
       // Requires the authenticator device to validate the user (through PIN, fingerprint, etc.)
       userVerification: 'required',
-      // Allow the credential to exist on a "roaming" authenticator device, like a phone or YubiKey
+      // Require the credential to exist on a "roaming" authenticator device, like a phone or YubiKey
       authenticatorAttachment: 'cross-platform',
       // Allow the user to choose between multiple accounts on the authenticator device
       residentKey: 'required',

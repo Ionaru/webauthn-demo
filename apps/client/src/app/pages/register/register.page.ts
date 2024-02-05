@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faKeySkeleton } from '@fortawesome/sharp-solid-svg-icons';
+import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { firstValueFrom } from 'rxjs';
 import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 
@@ -41,7 +41,7 @@ export class RegisterPage {
     .map((word) => word[0].toUpperCase() + word.slice(1))
     .join(' ');
 
-  readonly registerIcon = faKeySkeleton;
+  readonly registerIcon = faKey;
 
   readonly isLoading = signal(false);
 

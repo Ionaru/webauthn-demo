@@ -2,10 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {
-  faKeySkeleton,
-  faRightFromBracket,
-} from '@fortawesome/sharp-solid-svg-icons';
+import { faKey, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { firstValueFrom } from 'rxjs';
 
 import { BannerComponent } from '../../components/banner/banner.component';
@@ -32,7 +29,7 @@ import { buildCredential, encodeCredential } from '../../utils/webauthn';
 export class SecurePage {
   readonly #authService = inject(AuthService);
 
-  readonly passKeyIcon = faKeySkeleton;
+  readonly passKeyIcon = faKey;
   readonly logoutIcon = faRightFromBracket;
 
   readonly isLoading = signal(false);
