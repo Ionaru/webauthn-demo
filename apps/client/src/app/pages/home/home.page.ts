@@ -10,7 +10,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import { buildGetCredential, encodeGetCredential } from '../../utils/webauthn';
+import { buildCredentialRequestOptions, encodeGetCredential } from '../../utils/webauthn';
 
 @Component({
   templateUrl: './home.page.html',
@@ -41,7 +41,7 @@ export class HomePage {
       }
 
       const credential = (await navigator.credentials.get(
-        buildGetCredential(challenge),
+        buildCredentialRequestOptions(challenge),
       )) as PublicKeyCredential | null;
       if (!credential) {
         return;

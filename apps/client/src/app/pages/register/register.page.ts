@@ -12,7 +12,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import { buildCredential, encodeCredential } from '../../utils/webauthn';
+import { buildCredentialCreationOptions, encodeCredential } from '../../utils/webauthn';
 
 @Component({
   standalone: true,
@@ -56,7 +56,7 @@ export class RegisterPage {
 
       const username = this.displayNameControl.value || this.placeholderName;
       const credential = (await navigator.credentials.create(
-        buildCredential(challenge, username),
+        buildCredentialCreationOptions(challenge, username),
       )) as PublicKeyCredential | null;
       if (!credential) {
         return;

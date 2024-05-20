@@ -1,6 +1,6 @@
 import { utils } from '@passwordless-id/webauthn';
 
-export const buildCredential = (
+export const buildCredentialCreationOptions = (
   challenge: string,
   username: string,
 ): CredentialCreationOptions => ({
@@ -55,7 +55,7 @@ export const buildCredential = (
   },
 });
 
-export const buildGetCredential = (
+export const buildCredentialRequestOptions = (
   challenge: string,
 ): CredentialRequestOptions => ({
   publicKey: {
