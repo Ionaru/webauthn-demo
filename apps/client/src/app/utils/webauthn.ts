@@ -14,7 +14,7 @@ export const buildCredential = (
       // Also acts as the "scope" of the credential
       id: window.location.hostname,
       // A user-friendly name for the app, visible in some authenticator UIs
-      name: 'My App name',
+      name: 'WebAuthn Demo',
     },
 
     // Options for the public key
@@ -32,8 +32,8 @@ export const buildCredential = (
     authenticatorSelection: {
       // Requires the authenticator device to validate the user (through PIN, fingerprint, etc.)
       userVerification: 'required',
-      // Require the credential to exist on a "roaming" authenticator device, like a phone or YubiKey
-      authenticatorAttachment: 'cross-platform',
+      // Allow the credential to exist on a "roaming" authenticator device, like a phone or YubiKey, or on the local PC.
+      authenticatorAttachment: undefined,
       // Allow the user to choose between multiple accounts on the authenticator device
       residentKey: 'required',
     },
