@@ -3,7 +3,14 @@ import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 
-import { typedGql } from '../zeus/typedDocumentNode';
+import {
+  addPasskeyMutation,
+  createChallengeMutation,
+  loginMutation,
+  logoutMutation,
+  registerMutation,
+  sessionQuery,
+} from '../utils/graphql';
 
 @Injectable({
   providedIn: 'root',
@@ -20,11 +27,7 @@ export class AuthService {
     return this.#apollo
       .query({
         fetchPolicy: 'no-cache',
-        query: typedGql('query')({
-          session: {
-            user: true,
-          },
-        }),
+        query: sessionQuery,
       })
       .pipe(
         tap((result) => {
@@ -41,9 +44,7 @@ export class AuthService {
       .mutate({
         fetchPolicy: 'no-cache',
         useMutationLoading: false,
-        mutation: typedGql('mutation')({
-          createChallenge: true,
-        }),
+        mutation: createChallengeMutation,
       })
       .pipe(
         tap((result) => console.log('getChallenge result:', result)),
@@ -58,14 +59,10 @@ export class AuthService {
       .mutate({
         fetchPolicy: 'no-cache',
         useMutationLoading: false,
-        mutation: typedGql('mutation')({
-          loginUser: [
-            {
-              data: credential,
-            },
-            true,
-          ],
-        }),
+        mutation: loginMutation,
+        variables: {
+          data: credential,
+        },
       })
       .pipe(
         tap((result) => console.log('Login result:', result)),
@@ -86,14 +83,10 @@ export class AuthService {
       .mutate({
         fetchPolicy: 'no-cache',
         useMutationLoading: false,
-        mutation: typedGql('mutation')({
-          registerUser: [
-            {
-              data: credential,
-            },
-            true,
-          ],
-        }),
+        mutation: registerMutation,
+        variables: {
+          data: credential,
+        },
       })
       .pipe(
         tap((result) => console.log('Register result:', result)),
@@ -113,14 +106,10 @@ export class AuthService {
       .mutate({
         fetchPolicy: 'no-cache',
         useMutationLoading: false,
-        mutation: typedGql('mutation')({
-          addPasskey: [
-            {
-              data: credential,
-            },
-            true,
-          ],
-        }),
+        mutation: addPasskeyMutation,
+        variables: {
+          data: credential,
+        },
       })
       .pipe(
         tap((result) => console.log('Add result:', result)),
@@ -133,9 +122,7 @@ export class AuthService {
     console.log('Start logout!');
     return this.#apollo
       .mutate({
-        mutation: typedGql('mutation')({
-          logoutUser: true,
-        }),
+        mutation: logoutMutation,
       })
       .pipe(
         tap(() => this.#userSubject.next(null)),

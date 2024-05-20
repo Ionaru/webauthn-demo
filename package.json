@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nx run-many --target=serve --parallel 99",
     "format": "prettier --write . && nx run-many --skip-nx-cache --target=lint --all --fix",
-    "generate-gql-types": "npx graphql-zeus schema.graphql --typedDocumentNode apps/client/src/app && node tools/patch-zeus.js"
+    "generate-gql-types": "npx graphql-zeus@latest schema.graphql --typedDocumentNode apps/client/src/app && node tools/patch-zeus.js"
   },
   "private": true,
   "devDependencies": {
