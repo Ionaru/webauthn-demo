@@ -1,9 +1,11 @@
 import { randomUUID } from 'node:crypto';
+import { ExtendedAuthenticatorTransport, NamedAlgo } from '@passwordless-id/webauthn/dist/esm/types';
 
 interface Credential {
   id: string;
   publicKey: string;
-  algorithm: 'RS256' | 'ES256';
+  algorithm: NamedAlgo;
+  transports: ExtendedAuthenticatorTransport[];
 }
 
 export interface User {

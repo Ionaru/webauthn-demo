@@ -12,7 +12,11 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import { buildCredentialCreationOptions, encodeCredential } from '../../utils/webauthn';
+import {
+  buildCredentialCreationOptions,
+  encodeCredential,
+} from '../../utils/webauthn';
+import { utils } from '@passwordless-id/webauthn';
 
 @Component({
   standalone: true,
@@ -62,11 +66,28 @@ export class RegisterPage {
         return;
       }
 
-      const credentialId = credential.id;
       const response = credential.response as AuthenticatorAttestationResponse;
 
       this.#authService
-        .register$(encodeCredential(credentialId, username, response))
+        .register$({
+          id: credential.id,
+          rawId: utils.toBase64url(credential.rawId),
+          type: 'public-key',
+          user: {
+            id: username,
+            name: username,
+            displayName: username,
+          },
+          clientExtensionResults: {},
+          response: {
+            attestationObject: utils.toBase64url(response.attestationObject),
+            authenticatorData: utils.toBase64url(response.getAuthenticatorData()),
+            clientDataJSON: utils.toBase64url(response.clientDataJSON),
+            transports: response.getTransports() as any,
+            publicKey: utils.toBase64url(response.getPublicKey()!),
+            publicKeyAlgorithm: response.getPublicKeyAlgorithm(),
+          },
+        })
         .subscribe();
     } finally {
       this.isLoading.set(false);

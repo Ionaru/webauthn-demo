@@ -866,15 +866,31 @@ export type ScalarCoders = {
 type ZEUS_UNIONS = never
 
 export type ValueTypes = {
-    ["Mutation"]: AliasType<{
-addPasskey?: [{	data: string | Variable<any, string>},boolean | `@${string}`],
+    ["AuthenticatorAssertionResponseDTO"]: {
+	authenticatorData: string | Variable<any, string>,
+	clientDataJSON: string | Variable<any, string>,
+	signature: string | Variable<any, string>,
+	userHandle: string | Variable<any, string>
+};
+	["AuthenticatorAttestationResponseDTO"]: {
+	attestationObject: string | Variable<any, string>,
+	authenticatorData: string | Variable<any, string>,
+	clientDataJSON: string | Variable<any, string>,
+	publicKey: string | Variable<any, string>,
+	publicKeyAlgorithm: number | Variable<any, string>,
+	transports: string | Variable<any, string>
+};
+	["Mutation"]: AliasType<{
+addUserCredential?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>,	user: string | Variable<any, string>},boolean | `@${string}`],
+	/** base64url encoded random string */
 	createChallenge?:boolean | `@${string}`,
-loginUser?: [{	data: string | Variable<any, string>},boolean | `@${string}`],
+loginUser?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAssertionResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>},boolean | `@${string}`],
 	logoutUser?:boolean | `@${string}`,
-registerUser?: [{	data: string | Variable<any, string>},boolean | `@${string}`],
+registerUser?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>,	user: string | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
+	/** User session with ID and username, will return null if not logged in */
 	session?:ValueTypes["SessionDTO"],
 		__typename?: boolean | `@${string}`
 }>;
@@ -886,15 +902,31 @@ registerUser?: [{	data: string | Variable<any, string>},boolean | `@${string}`],
   }
 
 export type ResolverInputTypes = {
-    ["Mutation"]: AliasType<{
-addPasskey?: [{	data: string},boolean | `@${string}`],
+    ["AuthenticatorAssertionResponseDTO"]: {
+	authenticatorData: string,
+	clientDataJSON: string,
+	signature: string,
+	userHandle: string
+};
+	["AuthenticatorAttestationResponseDTO"]: {
+	attestationObject: string,
+	authenticatorData: string,
+	clientDataJSON: string,
+	publicKey: string,
+	publicKeyAlgorithm: number,
+	transports: string
+};
+	["Mutation"]: AliasType<{
+addUserCredential?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	type: string,	user: string},boolean | `@${string}`],
+	/** base64url encoded random string */
 	createChallenge?:boolean | `@${string}`,
-loginUser?: [{	data: string},boolean | `@${string}`],
+loginUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAssertionResponseDTO"],	type: string},boolean | `@${string}`],
 	logoutUser?:boolean | `@${string}`,
-registerUser?: [{	data: string},boolean | `@${string}`],
+registerUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	type: string,	user: string},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
+	/** User session with ID and username, will return null if not logged in */
 	session?:ResolverInputTypes["SessionDTO"],
 		__typename?: boolean | `@${string}`
 }>;
@@ -911,15 +943,31 @@ registerUser?: [{	data: string},boolean | `@${string}`],
   }
 
 export type ModelTypes = {
-    ["Mutation"]: {
-		addPasskey: boolean,
+    ["AuthenticatorAssertionResponseDTO"]: {
+	authenticatorData: string,
+	clientDataJSON: string,
+	signature: string,
+	userHandle: string
+};
+	["AuthenticatorAttestationResponseDTO"]: {
+	attestationObject: string,
+	authenticatorData: string,
+	clientDataJSON: string,
+	publicKey: string,
+	publicKeyAlgorithm: number,
+	transports: string
+};
+	["Mutation"]: {
+		addUserCredential: boolean,
+	/** base64url encoded random string */
 	createChallenge: string,
 	loginUser: boolean,
 	logoutUser: boolean,
 	registerUser: boolean
 };
 	["Query"]: {
-		session: ModelTypes["SessionDTO"]
+		/** User session with ID and username, will return null if not logged in */
+	session?: ModelTypes["SessionDTO"] | undefined
 };
 	["SessionDTO"]: {
 		user?: string | undefined,
@@ -935,9 +983,24 @@ export type GraphQLTypes = {
     // ------------------------------------------------------;
 	// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY);
 	// ------------------------------------------------------;
+	["AuthenticatorAssertionResponseDTO"]: {
+		authenticatorData: string,
+	clientDataJSON: string,
+	signature: string,
+	userHandle: string
+};
+	["AuthenticatorAttestationResponseDTO"]: {
+		attestationObject: string,
+	authenticatorData: string,
+	clientDataJSON: string,
+	publicKey: string,
+	publicKeyAlgorithm: number,
+	transports: string
+};
 	["Mutation"]: {
 	__typename: "Mutation",
-	addPasskey: boolean,
+	addUserCredential: boolean,
+	/** base64url encoded random string */
 	createChallenge: string,
 	loginUser: boolean,
 	logoutUser: boolean,
@@ -945,7 +1008,8 @@ export type GraphQLTypes = {
 };
 	["Query"]: {
 	__typename: "Query",
-	session: GraphQLTypes["SessionDTO"]
+	/** User session with ID and username, will return null if not logged in */
+	session?: GraphQLTypes["SessionDTO"] | undefined
 };
 	["SessionDTO"]: {
 	__typename: "SessionDTO",
@@ -955,4 +1019,7 @@ export type GraphQLTypes = {
     }
 
 
-type ZEUS_VARIABLES = {}
+type ZEUS_VARIABLES = {
+	["AuthenticatorAssertionResponseDTO"]: ValueTypes["AuthenticatorAssertionResponseDTO"];
+	["AuthenticatorAttestationResponseDTO"]: ValueTypes["AuthenticatorAttestationResponseDTO"];
+}

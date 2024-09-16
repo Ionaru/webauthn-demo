@@ -1,22 +1,28 @@
 /* eslint-disable */
 
 export const AllTypesProps: Record<string,any> = {
-	Mutation:{
-		addPasskey:{
+	AuthenticatorAssertionResponseDTO:{
 
+	},
+	AuthenticatorAttestationResponseDTO:{
+
+	},
+	Mutation:{
+		addUserCredential:{
+			response:"AuthenticatorAttestationResponseDTO"
 		},
 		loginUser:{
-
+			response:"AuthenticatorAssertionResponseDTO"
 		},
 		registerUser:{
-
+			response:"AuthenticatorAttestationResponseDTO"
 		}
 	}
 }
 
 export const ReturnTypes: Record<string,any> = {
 	Mutation:{
-		addPasskey:"Boolean",
+		addUserCredential:"Boolean",
 		createChallenge:"String",
 		loginUser:"Boolean",
 		logoutUser:"Boolean",

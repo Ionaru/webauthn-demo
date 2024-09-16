@@ -14,7 +14,16 @@ export const createChallengeMutation = typedGql('mutation')({
 export const loginMutation = typedGql('mutation')({
   loginUser: [
     {
-      data: $('data', 'String!'),
+      id: $('id', 'String!'),
+      rawId: $('rawId', 'String!'),
+      // response: $('response', 'AuthenticatorAssertionResponseDTO!'),
+      response: {
+        authenticatorData: $('authenticatorData', 'String!'),
+        clientDataJSON: $('clientDataJSON', 'String!'),
+        signature: $('signature', 'String!'),
+        userHandle: $('userHandle', 'String'),
+      },
+      type: $('type', 'String!'),
     },
     true,
   ],
@@ -23,20 +32,32 @@ export const loginMutation = typedGql('mutation')({
 export const registerMutation = typedGql('mutation')({
   registerUser: [
     {
-      data: $('data', 'String!'),
+      id: $('id', 'String!'),
+      rawId: $('rawId', 'String!'),
+      // response: $('response', 'AuthenticatorAssertionResponseDTO!'),
+      response: {
+        attestationObject: $('attestationObject', 'String!'),
+        authenticatorData: $('authenticatorData', 'String!'),
+        clientDataJSON: $('clientDataJSON', 'String!'),
+        transports: $('transports', '[String!]!'),
+        publicKey: $('publicKey', 'String!'),
+        publicKeyAlgorithm: $('publicKeyAlgorithm', 'Float!'),
+      },
+      type: $('type', 'String!'),
+      user: $('user', 'String!'),
     },
     true,
   ],
 });
 
-export const addPasskeyMutation = typedGql('mutation')({
-  addPasskey: [
-    {
-      data: $('data', 'String!'),
-    },
-    true,
-  ],
-});
+// export const addPasskeyMutation = typedGql('mutation')({
+//   addUserCredential: [
+//     {
+//       data: $('data', 'String!'),
+//     }as any,
+//     true,
+//   ],
+// });
 
 export const logoutMutation = typedGql('mutation')({
   logoutUser: true,

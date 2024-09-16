@@ -11,7 +11,10 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import { buildCredentialCreationOptions, encodeCredential } from '../../utils/webauthn';
+import {
+  buildCredentialCreationOptions,
+  encodeCredential,
+} from '../../utils/webauthn';
 
 @Component({
   templateUrl: './secure.page.html',
@@ -61,10 +64,10 @@ export class SecurePage {
 
       const credentialId = credential.id;
       const response = credential.response as AuthenticatorAttestationResponse;
-
-      this.#authService
-        .addPasskey$(encodeCredential(credentialId, username, response))
-        .subscribe();
+      //
+      // this.#authService
+      //   .addPasskey$(encodeCredential(credentialId, username, response) as any)
+      //   .subscribe();
     } finally {
       this.isLoading.set(false);
     }

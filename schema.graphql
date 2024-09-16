@@ -2,16 +2,35 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AuthenticatorAssertionResponseDTO {
+  authenticatorData: String!
+  clientDataJSON: String!
+  signature: String!
+  userHandle: String
+}
+
+input AuthenticatorAttestationResponseDTO {
+  attestationObject: String!
+  authenticatorData: String!
+  clientDataJSON: String!
+  publicKey: String!
+  publicKeyAlgorithm: Float!
+  transports: [String!]!
+}
+
 type Mutation {
-  addPasskey(data: String!): Boolean!
+  addUserCredential(id: String!, rawId: String!, response: AuthenticatorAttestationResponseDTO!, type: String!, user: String!): Boolean!
+
+  """base64url encoded random string"""
   createChallenge: String!
-  loginUser(data: String!): Boolean!
+  loginUser(id: String!, rawId: String!, response: AuthenticatorAssertionResponseDTO!, type: String!): Boolean!
   logoutUser: Boolean!
-  registerUser(data: String!): Boolean!
+  registerUser(id: String!, rawId: String!, response: AuthenticatorAttestationResponseDTO!, type: String!, user: String!): Boolean!
 }
 
 type Query {
-  session: SessionDTO!
+  """User session with ID and username, will return null if not logged in"""
+  session: SessionDTO
 }
 
 type SessionDTO {

@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { SessionModule } from 'nestjs-session';
 
+// import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
 
@@ -18,13 +19,13 @@ import { AppService } from './app.service';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: { path: 'schema.graphql' },
-      context: ({ res }) => ({ res }),
+      context: ({ req }) => ({ req }),
       driver: ApolloDriver,
       introspection: true,
       sortSchema: true,
     }),
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [AppService, AppResolver],
 })
 export class AppModule {}

@@ -10,7 +10,11 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import { buildCredentialRequestOptions, encodeGetCredential } from '../../utils/webauthn';
+import {
+  buildCredentialRequestOptions,
+  encodeGetCredential,
+} from '../../utils/webauthn';
+import { utils } from '@passwordless-id/webauthn';
 
 @Component({
   templateUrl: './home.page.html',
@@ -47,11 +51,23 @@ export class HomePage {
         return;
       }
 
-      const credentialId = credential.id;
+      console.log(credential);
+
       const response = credential.response as AuthenticatorAssertionResponse;
 
       this.#authService
-        .login$(encodeGetCredential(credentialId, response))
+        .login$({
+          id: credential.id,
+          rawId: utils.toBase64url(credential.rawId),
+          type: 'public-key',
+          clientExtensionResults: {},
+          response: {
+            authenticatorData: utils.toBase64url(response.authenticatorData),
+            clientDataJSON: utils.toBase64url(response.clientDataJSON),
+            signature: utils.toBase64url(response.signature),
+            userHandle: response.userHandle ? utils.toBase64url(response.userHandle) : undefined,
+          }
+        })
         .subscribe();
     } finally {
       this.isLoading.set(false);

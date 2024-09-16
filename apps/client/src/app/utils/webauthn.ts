@@ -25,8 +25,8 @@ export const buildCredentialCreationOptions = (
       { alg: -257, type: 'public-key' },
     ],
 
-    // Time (seconds) after which the operation will be aborted
-    timeout: 300,
+    // Time (in ms) after which the operation will be aborted
+    timeout: 300_000,
 
     // Options for the authenticator device
     authenticatorSelection: {
@@ -72,8 +72,8 @@ export const buildCredentialRequestOptions = (
     // Or leave empty to allow any user
     allowCredentials: [],
 
-    // Time (seconds) after which the operation will be aborted
-    timeout: 300,
+    // Time (in ms) after which the operation will be aborted
+    timeout: 300_000,
 
     // Requires the authenticator device to validate the user (through PIN, fingerprint, etc.)
     userVerification: 'required',

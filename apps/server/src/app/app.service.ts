@@ -1,11 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
+import { server } from '@passwordless-id/webauthn';
 import {
-  verifyAuthentication,
-  verifyRegistration,
-} from '@passwordless-id/webauthn/dist/esm/server.js';
-import {
-  AuthenticationEncoded,
-  RegistrationEncoded,
+  AuthenticationJSON,
+  RegistrationJSON,
 } from '@passwordless-id/webauthn/dist/esm/types';
 
 import { challengeStore } from '../stores/challenge.store';
@@ -25,23 +22,25 @@ export class AppService {
     return result;
   }
 
-  async loginUser(data: string): Promise<User | null> {
-    const authentication = JSON.parse(data) as AuthenticationEncoded;
-
-    const matchingUser = userStore.getUser(authentication.credentialId);
+  async loginUser(authentication: AuthenticationJSON): Promise<User | null> {
+    // console.log('loginUser', authentication);
+    const matchingUser = userStore.getUser(authentication.id);
     if (!matchingUser) {
       return;
     }
+    // console.log('matchingUser', matchingUser);
 
     const matchingCredential = matchingUser.credentials.find(
-      (credential) => credential.id === authentication.credentialId,
+      (credential) => credential.id === authentication.id,
     );
     if (!matchingCredential) {
-      return;
+      throw new HttpException('Credential not found', 404);
     }
 
+    // console.log('matchingCredential', matchingCredential);
+
     try {
-      await verifyAuthentication(authentication, matchingCredential, {
+      await server.verifyAuthentication(authentication, matchingCredential, {
         challenge: (challenge: string) =>
           this.checkChallenge(fromBase64(challenge)),
         counter: -1,
@@ -55,27 +54,26 @@ export class AppService {
     return matchingUser;
   }
 
-  async registerUser(data: string): Promise<boolean> {
-    const registration = JSON.parse(data) as RegistrationEncoded;
-
-    const registrationParsed = await verifyRegistration(registration, {
+  async registerUser(registration: RegistrationJSON): Promise<boolean> {
+    const registrationParsed = await server.verifyRegistration(registration, {
       challenge: (challenge: string) =>
         this.checkChallenge(fromBase64(challenge)),
       origin: () => true,
     });
+    //
+    // console.log('registrationParsed', registrationParsed);
+    // console.log('registrationParsed', registrationParsed.user);
 
     userStore.createUser(
-      registrationParsed.username,
+      registrationParsed.user.name,
       registrationParsed.credential,
     );
 
     return true;
   }
 
-  async addPasskey(user: string, data: string): Promise<boolean> {
-    const registration = JSON.parse(data) as RegistrationEncoded;
-
-    const registrationParsed = await verifyRegistration(registration, {
+  async addPasskey(user: string, registration: RegistrationJSON): Promise<boolean> {
+    const registrationParsed = await server.verifyRegistration(registration, {
       challenge: (challenge: string) =>
         this.checkChallenge(fromBase64(challenge)),
       origin: () => true,
