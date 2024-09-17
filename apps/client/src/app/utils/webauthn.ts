@@ -8,7 +8,7 @@ export const buildCredentialCreationOptions = (
     // Challenge that the authenticator must sign
     challenge: utils.toBuffer(challenge),
 
-    // Information about relying party
+    // Information about Relying Party (the server)
     rp: {
       // The ID of the relying party, will be validated on the server
       // Also acts as the "scope" of the credential
