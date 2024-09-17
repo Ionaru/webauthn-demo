@@ -5,3 +5,5 @@
 .angular
 schema.graphql
 apps/client/src/app/zeus/*.ts
+
+/.nx/workspace-data
