@@ -2,7 +2,11 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 import { bindCallback, map } from 'rxjs';
 
-import { AuthenticationDTO, RegistrationDTO, SessionDTO } from '../types/dto.graphql';
+import {
+  AuthenticationDTO,
+  RegistrationDTO,
+  SessionDTO,
+} from '../types/dto.graphql';
 
 import { AppService } from './app.service';
 
@@ -27,15 +31,16 @@ export class AppResolver {
   @Mutation(() => Boolean)
   async loginUser(
     @Args() queryArguments: AuthenticationDTO,
-    @Context() { req }: { req: Request },
+    @Context() { req: { session } }: { req: Request },
   ) {
-    console.log('SESSION', req.session);
     const result = await this.appService.loginUser(queryArguments);
     if (result) {
-      req.session.userId = result.id;
-      req.session.user = result.username;
+      session.userId = result.id;
+      session.user = result.username;
     }
-    return Boolean(result);
+    return bindCallback(session.save.bind(session))().pipe(
+      map(() => Boolean(result)),
+    );
   }
 
   @Mutation(() => Boolean)

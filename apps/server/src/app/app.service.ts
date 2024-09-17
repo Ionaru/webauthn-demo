@@ -23,12 +23,10 @@ export class AppService {
   }
 
   async loginUser(authentication: AuthenticationJSON): Promise<User | null> {
-    // console.log('loginUser', authentication);
     const matchingUser = userStore.getUser(authentication.id);
     if (!matchingUser) {
       return;
     }
-    // console.log('matchingUser', matchingUser);
 
     const matchingCredential = matchingUser.credentials.find(
       (credential) => credential.id === authentication.id,
@@ -36,8 +34,6 @@ export class AppService {
     if (!matchingCredential) {
       throw new HttpException('Credential not found', 404);
     }
-
-    // console.log('matchingCredential', matchingCredential);
 
     try {
       await server.verifyAuthentication(authentication, matchingCredential, {
@@ -60,9 +56,6 @@ export class AppService {
         this.checkChallenge(fromBase64(challenge)),
       origin: () => true,
     });
-    //
-    // console.log('registrationParsed', registrationParsed);
-    // console.log('registrationParsed', registrationParsed.user);
 
     userStore.createUser(
       registrationParsed.user.name,
@@ -72,7 +65,10 @@ export class AppService {
     return true;
   }
 
-  async addPasskey(user: string, registration: RegistrationJSON): Promise<boolean> {
+  async addPasskey(
+    user: string,
+    registration: RegistrationJSON,
+  ): Promise<boolean> {
     const registrationParsed = await server.verifyRegistration(registration, {
       challenge: (challenge: string) =>
         this.checkChallenge(fromBase64(challenge)),

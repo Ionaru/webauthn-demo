@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
+import { utils } from '@passwordless-id/webauthn';
 import { firstValueFrom } from 'rxjs';
 
 import { BannerComponent } from '../../components/banner/banner.component';
@@ -10,11 +11,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import {
-  buildCredentialRequestOptions,
-  encodeGetCredential,
-} from '../../utils/webauthn';
-import { utils } from '@passwordless-id/webauthn';
+import { buildCredentialRequestOptions } from '../../utils/webauthn';
 
 @Component({
   templateUrl: './home.page.html',
@@ -51,8 +48,6 @@ export class HomePage {
         return;
       }
 
-      console.log(credential);
-
       const response = credential.response as AuthenticatorAssertionResponse;
 
       this.#authService
@@ -65,8 +60,10 @@ export class HomePage {
             authenticatorData: utils.toBase64url(response.authenticatorData),
             clientDataJSON: utils.toBase64url(response.clientDataJSON),
             signature: utils.toBase64url(response.signature),
-            userHandle: response.userHandle ? utils.toBase64url(response.userHandle) : undefined,
-          }
+            userHandle: response.userHandle
+              ? utils.toBase64url(response.userHandle)
+              : undefined,
+          },
         })
         .subscribe();
     } finally {

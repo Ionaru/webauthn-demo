@@ -1,37 +1,47 @@
 import { ApiProperty } from '@nestjs/swagger';
 import type {
   AuthenticationJSON,
-  AuthenticatorAssertionResponseJSON, AuthenticatorAttestationResponseJSON, ExtendedAuthenticatorTransport,
-  RegistrationJSON, User
+  AuthenticatorAssertionResponseJSON,
+  AuthenticatorAttestationResponseJSON,
+  ExtendedAuthenticatorTransport,
+  RegistrationJSON,
+  User,
 } from '@passwordless-id/webauthn/dist/esm/types';
 
+import { descriptions } from './dto.common';
+
 export class SessionDTO {
-  @ApiProperty({ required: false, description: 'User ID' })
+  @ApiProperty({ nullable: true, description: 'User ID in UUID format' })
   userId?: string;
 
-  @ApiProperty({ required: false, description: 'Username' })
+  @ApiProperty({ nullable: true, description: 'The chosen username' })
   user?: string;
 }
 
-export class AuthenticatorAssertionResponseDTO implements AuthenticatorAssertionResponseJSON {
-  @ApiProperty()
+export class AuthenticatorAssertionResponseDTO
+  implements AuthenticatorAssertionResponseJSON
+{
+  @ApiProperty({ description: descriptions.response.clientDataJSON })
   clientDataJSON!: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.response.authenticatorData })
   authenticatorData!: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.response.signature })
   signature!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    nullable: true,
+    description: descriptions.response.userHandle,
+  })
   userHandle?: string;
 }
 
 export class AuthenticationDTO implements AuthenticationJSON {
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.id })
   id!: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.rawId })
   rawId!: string;
 
   @ApiProperty()
@@ -39,41 +49,48 @@ export class AuthenticationDTO implements AuthenticationJSON {
 
   clientExtensionResults = {};
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.type })
   type!: PublicKeyCredentialType;
 }
 
-export class AuthenticatorAttestationResponseDTO implements AuthenticatorAttestationResponseJSON {
-  @ApiProperty()
+export class UserDTO implements User {
+  @ApiProperty({ description: descriptions.user.id })
+  id!: string;
+
+  @ApiProperty({ description: descriptions.user.name })
+  name!: string;
+
+  @ApiProperty({ nullable: true, description: descriptions.user.displayName })
+  displayName?: string;
+}
+
+export class AuthenticatorAttestationResponseDTO
+  implements AuthenticatorAttestationResponseJSON
+{
+  @ApiProperty({ description: descriptions.response.clientDataJSON })
   clientDataJSON!: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.response.authenticatorData })
   authenticatorData!: string;
 
-  @ApiProperty()
-  signature!: string;
-
-  @ApiProperty()
-  userHandle?: string;
-
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.response.attestationObject })
   attestationObject: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.response.publicKey })
   publicKey: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.response.publicKeyAlgorithm })
   publicKeyAlgorithm: number;
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.response.transports[0] })
   transports: ExtendedAuthenticatorTransport[];
 }
 
 export class RegistrationDTO implements RegistrationJSON {
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.id })
   id!: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.rawId })
   rawId!: string;
 
   @ApiProperty()
@@ -81,9 +98,9 @@ export class RegistrationDTO implements RegistrationJSON {
 
   clientExtensionResults = {};
 
-  @ApiProperty()
+  @ApiProperty({ description: descriptions.type })
   type!: PublicKeyCredentialType;
 
   @ApiProperty()
-  user!: User;
+  user!: UserDTO;
 }

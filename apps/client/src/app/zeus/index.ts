@@ -870,7 +870,7 @@ export type ValueTypes = {
 	authenticatorData: string | Variable<any, string>,
 	clientDataJSON: string | Variable<any, string>,
 	signature: string | Variable<any, string>,
-	userHandle: string | Variable<any, string>
+	userHandle?: string | undefined | null | Variable<any, string>
 };
 	["AuthenticatorAttestationResponseDTO"]: {
 	attestationObject: string | Variable<any, string>,
@@ -878,15 +878,15 @@ export type ValueTypes = {
 	clientDataJSON: string | Variable<any, string>,
 	publicKey: string | Variable<any, string>,
 	publicKeyAlgorithm: number | Variable<any, string>,
-	transports: string | Variable<any, string>
+	transports: Array<string> | Variable<any, string>
 };
 	["Mutation"]: AliasType<{
-addUserCredential?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>,	user: string | Variable<any, string>},boolean | `@${string}`],
+addUserCredential?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
 	/** base64url encoded random string */
 	createChallenge?:boolean | `@${string}`,
 loginUser?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAssertionResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>},boolean | `@${string}`],
 	logoutUser?:boolean | `@${string}`,
-registerUser?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>,	user: string | Variable<any, string>},boolean | `@${string}`],
+registerUser?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
@@ -898,7 +898,12 @@ registerUser?: [{	id: string | Variable<any, string>,	rawId: string | Variable<a
 	user?:boolean | `@${string}`,
 	userId?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
-}>
+}>;
+	["UserDTO"]: {
+	displayName?: string | undefined | null | Variable<any, string>,
+	id: string | Variable<any, string>,
+	name: string | Variable<any, string>
+}
   }
 
 export type ResolverInputTypes = {
@@ -906,7 +911,7 @@ export type ResolverInputTypes = {
 	authenticatorData: string,
 	clientDataJSON: string,
 	signature: string,
-	userHandle: string
+	userHandle?: string | undefined | null
 };
 	["AuthenticatorAttestationResponseDTO"]: {
 	attestationObject: string,
@@ -914,15 +919,15 @@ export type ResolverInputTypes = {
 	clientDataJSON: string,
 	publicKey: string,
 	publicKeyAlgorithm: number,
-	transports: string
+	transports: Array<string>
 };
 	["Mutation"]: AliasType<{
-addUserCredential?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	type: string,	user: string},boolean | `@${string}`],
+addUserCredential?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	type: string,	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
 	/** base64url encoded random string */
 	createChallenge?:boolean | `@${string}`,
 loginUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAssertionResponseDTO"],	type: string},boolean | `@${string}`],
 	logoutUser?:boolean | `@${string}`,
-registerUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	type: string,	user: string},boolean | `@${string}`],
+registerUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	type: string,	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
@@ -935,6 +940,11 @@ registerUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["Authe
 	userId?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
+	["UserDTO"]: {
+	displayName?: string | undefined | null,
+	id: string,
+	name: string
+};
 	["schema"]: AliasType<{
 	query?:ResolverInputTypes["Query"],
 	mutation?:ResolverInputTypes["Mutation"],
@@ -947,7 +957,7 @@ export type ModelTypes = {
 	authenticatorData: string,
 	clientDataJSON: string,
 	signature: string,
-	userHandle: string
+	userHandle?: string | undefined
 };
 	["AuthenticatorAttestationResponseDTO"]: {
 	attestationObject: string,
@@ -955,7 +965,7 @@ export type ModelTypes = {
 	clientDataJSON: string,
 	publicKey: string,
 	publicKeyAlgorithm: number,
-	transports: string
+	transports: Array<string>
 };
 	["Mutation"]: {
 		addUserCredential: boolean,
@@ -973,6 +983,11 @@ export type ModelTypes = {
 		user?: string | undefined,
 	userId?: string | undefined
 };
+	["UserDTO"]: {
+	displayName?: string | undefined,
+	id: string,
+	name: string
+};
 	["schema"]: {
 	query?: ModelTypes["Query"] | undefined,
 	mutation?: ModelTypes["Mutation"] | undefined
@@ -987,7 +1002,7 @@ export type GraphQLTypes = {
 		authenticatorData: string,
 	clientDataJSON: string,
 	signature: string,
-	userHandle: string
+	userHandle?: string | undefined
 };
 	["AuthenticatorAttestationResponseDTO"]: {
 		attestationObject: string,
@@ -995,7 +1010,7 @@ export type GraphQLTypes = {
 	clientDataJSON: string,
 	publicKey: string,
 	publicKeyAlgorithm: number,
-	transports: string
+	transports: Array<string>
 };
 	["Mutation"]: {
 	__typename: "Mutation",
@@ -1015,6 +1030,11 @@ export type GraphQLTypes = {
 	__typename: "SessionDTO",
 	user?: string | undefined,
 	userId?: string | undefined
+};
+	["UserDTO"]: {
+		displayName?: string | undefined,
+	id: string,
+	name: string
 }
     }
 
@@ -1022,4 +1042,5 @@ export type GraphQLTypes = {
 type ZEUS_VARIABLES = {
 	["AuthenticatorAssertionResponseDTO"]: ValueTypes["AuthenticatorAssertionResponseDTO"];
 	["AuthenticatorAttestationResponseDTO"]: ValueTypes["AuthenticatorAttestationResponseDTO"];
+	["UserDTO"]: ValueTypes["UserDTO"];
 }

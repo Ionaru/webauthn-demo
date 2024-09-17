@@ -9,14 +9,19 @@ export const AllTypesProps: Record<string,any> = {
 	},
 	Mutation:{
 		addUserCredential:{
-			response:"AuthenticatorAttestationResponseDTO"
+			response:"AuthenticatorAttestationResponseDTO",
+			user:"UserDTO"
 		},
 		loginUser:{
 			response:"AuthenticatorAssertionResponseDTO"
 		},
 		registerUser:{
-			response:"AuthenticatorAttestationResponseDTO"
+			response:"AuthenticatorAttestationResponseDTO",
+			user:"UserDTO"
 		}
+	},
+	UserDTO:{
+
 	}
 }
 

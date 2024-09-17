@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { utils } from '@passwordless-id/webauthn';
 
 export const buildCredentialCreationOptions = (
@@ -8,9 +9,9 @@ export const buildCredentialCreationOptions = (
     // Challenge that the authenticator must sign
     challenge: utils.toBuffer(challenge),
 
-    // Information about relying party
+    // Information about Relying Party
     rp: {
-      // The ID of the relying party, will be validated on the server
+      // The ID of the Relying Party, will be validated on the server
       // Also acts as the "scope" of the credential
       id: window.location.hostname,
       // A user-friendly name for the app, visible in some authenticator UIs
@@ -63,7 +64,7 @@ export const buildCredentialRequestOptions = (
     // Challenge that the authenticator must sign
     challenge: utils.toBuffer(challenge),
 
-    // The ID of the relying party, will be validated on the server
+    // The ID of the Relying Party, will be validated on the server
     // Also acts as the "scope" of the credential
     rpId: window.location.hostname,
 
@@ -79,44 +80,3 @@ export const buildCredentialRequestOptions = (
     userVerification: 'required',
   },
 });
-
-const getAlgorithmName = (algorithmNumber: number) => {
-  switch (algorithmNumber) {
-    case -7: {
-      return 'ES256';
-    }
-    case -257: {
-      return 'RS256';
-    }
-    default: {
-      throw new Error(`Unknown algorithm code: ${algorithmNumber}`);
-    }
-  }
-};
-
-export const encodeCredential = (
-  id: string,
-  username: string,
-  response: AuthenticatorAttestationResponse,
-) =>
-  JSON.stringify({
-    credential: {
-      id,
-      publicKey: utils.toBase64url(response.getPublicKey()!),
-      algorithm: getAlgorithmName(response.getPublicKeyAlgorithm()!),
-    },
-    authenticatorData: utils.toBase64url(response.getAuthenticatorData()),
-    clientData: utils.toBase64url(response.clientDataJSON),
-    username,
-  });
-
-export const encodeGetCredential = (
-  id: string,
-  response: AuthenticatorAssertionResponse,
-) =>
-  JSON.stringify({
-    credentialId: id,
-    authenticatorData: utils.toBase64url(response.authenticatorData),
-    clientData: utils.toBase64url(response.clientDataJSON),
-    signature: utils.toBase64url(response.signature),
-  });

@@ -16,7 +16,6 @@ export const loginMutation = typedGql('mutation')({
     {
       id: $('id', 'String!'),
       rawId: $('rawId', 'String!'),
-      // response: $('response', 'AuthenticatorAssertionResponseDTO!'),
       response: {
         authenticatorData: $('authenticatorData', 'String!'),
         clientDataJSON: $('clientDataJSON', 'String!'),
@@ -34,7 +33,6 @@ export const registerMutation = typedGql('mutation')({
     {
       id: $('id', 'String!'),
       rawId: $('rawId', 'String!'),
-      // response: $('response', 'AuthenticatorAssertionResponseDTO!'),
       response: {
         attestationObject: $('attestationObject', 'String!'),
         authenticatorData: $('authenticatorData', 'String!'),
@@ -44,20 +42,39 @@ export const registerMutation = typedGql('mutation')({
         publicKeyAlgorithm: $('publicKeyAlgorithm', 'Float!'),
       },
       type: $('type', 'String!'),
-      user: $('user', 'String!'),
+      user: {
+        id: $('userId', 'String!'),
+        name: $('userName', 'String!'),
+        displayName: $('userDisplayName', 'String'),
+      },
     },
     true,
   ],
 });
 
-// export const addPasskeyMutation = typedGql('mutation')({
-//   addUserCredential: [
-//     {
-//       data: $('data', 'String!'),
-//     }as any,
-//     true,
-//   ],
-// });
+export const addPasskeyMutation = typedGql('mutation')({
+  addUserCredential: [
+    {
+      id: $('id', 'String!'),
+      rawId: $('rawId', 'String!'),
+      response: {
+        attestationObject: $('attestationObject', 'String!'),
+        authenticatorData: $('authenticatorData', 'String!'),
+        clientDataJSON: $('clientDataJSON', 'String!'),
+        transports: $('transports', '[String!]!'),
+        publicKey: $('publicKey', 'String!'),
+        publicKeyAlgorithm: $('publicKeyAlgorithm', 'Float!'),
+      },
+      type: $('type', 'String!'),
+      user: {
+        id: $('userId', 'String!'),
+        name: $('userName', 'String!'),
+        displayName: $('userDisplayName', 'String'),
+      },
+    },
+    true,
+  ],
+});
 
 export const logoutMutation = typedGql('mutation')({
   logoutUser: true,

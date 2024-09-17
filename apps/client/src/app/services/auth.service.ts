@@ -1,17 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import type {
+  AuthenticationJSON,
+  RegistrationJSON,
+} from '@passwordless-id/webauthn/dist/esm/types';
 import { Apollo } from 'apollo-angular';
 import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 
 import {
-  // addPasskeyMutation,
+  addPasskeyMutation,
   createChallengeMutation,
   loginMutation,
   logoutMutation,
   registerMutation,
   sessionQuery,
 } from '../utils/graphql';
-import type { AuthenticationJSON, RegistrationJSON } from '@passwordless-id/webauthn/dist/esm/types';
 
 @Injectable({
   providedIn: 'root',
@@ -65,10 +68,10 @@ export class AuthService {
           id: credential.id,
           rawId: credential.rawId,
           // response: {
-            authenticatorData: credential.response.authenticatorData,
-            clientDataJSON: credential.response.clientDataJSON,
-            signature: credential.response.signature,
-            userHandle: credential.response.userHandle ?? '',
+          authenticatorData: credential.response.authenticatorData,
+          clientDataJSON: credential.response.clientDataJSON,
+          signature: credential.response.signature,
+          userHandle: credential.response.userHandle ?? '',
           // },
           type: credential.type,
         },
@@ -97,7 +100,6 @@ export class AuthService {
           id: credential.id,
           rawId: credential.rawId,
           type: credential.type,
-          user: credential.user.name,
 
           attestationObject: credential.response.attestationObject,
           authenticatorData: credential.response.authenticatorData,
@@ -105,6 +107,10 @@ export class AuthService {
           transports: credential.response.transports,
           publicKey: credential.response.publicKey,
           publicKeyAlgorithm: credential.response.publicKeyAlgorithm,
+
+          userId: credential.user.id ?? crypto.randomUUID(),
+          userName: credential.user.name,
+          userDisplayName: credential.user.displayName,
         },
       })
       .pipe(
@@ -119,23 +125,36 @@ export class AuthService {
       );
   }
 
-  // addPasskey$(credential: RegistrationJSON) {
-  //   console.log('Start add passkey!');
-  //   return this.#apollo
-  //     .mutate({
-  //       fetchPolicy: 'no-cache',
-  //       useMutationLoading: false,
-  //       mutation: addPasskeyMutation,
-  //       variables: {
-  //         data: credential,
-  //       } as any,
-  //     })
-  //     .pipe(
-  //       tap((result) => console.log('Add result:', result)),
-  //       map((result) => result.data?.addUserCredential),
-  //       tap(() => console.log('End add passkey!')),
-  //     );
-  // }
+  addPasskey$(credential: RegistrationJSON) {
+    console.log('Start add passkey!');
+    return this.#apollo
+      .mutate({
+        fetchPolicy: 'no-cache',
+        useMutationLoading: false,
+        mutation: addPasskeyMutation,
+        variables: {
+          id: credential.id,
+          rawId: credential.rawId,
+          type: credential.type,
+
+          attestationObject: credential.response.attestationObject,
+          authenticatorData: credential.response.authenticatorData,
+          clientDataJSON: credential.response.clientDataJSON,
+          transports: credential.response.transports,
+          publicKey: credential.response.publicKey,
+          publicKeyAlgorithm: credential.response.publicKeyAlgorithm,
+
+          userId: credential.user.id ?? crypto.randomUUID(),
+          userName: credential.user.name,
+          userDisplayName: credential.user.displayName,
+        },
+      })
+      .pipe(
+        tap((result) => console.log('Add result:', result)),
+        map((result) => result.data?.addUserCredential),
+        tap(() => console.log('End add passkey!')),
+      );
+  }
 
   logout$() {
     console.log('Start logout!');
