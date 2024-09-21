@@ -67,13 +67,12 @@ export class AuthService {
         variables: {
           id: credential.id,
           rawId: credential.rawId,
-          // response: {
+          type: credential.type,
+
           authenticatorData: credential.response.authenticatorData,
           clientDataJSON: credential.response.clientDataJSON,
           signature: credential.response.signature,
           userHandle: credential.response.userHandle ?? '',
-          // },
-          type: credential.type,
         },
       })
       .pipe(

@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
       <div
         class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen"
       >
-        <ng-content></ng-content>
+        <ng-content />
       </div>
     </section>
   `,

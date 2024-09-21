@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'button[app-button]',
   standalone: true,
-  template: '<ng-content></ng-content>',
+  template: '<ng-content />',
   host: {
     type: 'button',
     class: `
