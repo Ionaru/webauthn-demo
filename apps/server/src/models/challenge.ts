@@ -4,7 +4,7 @@ import {
   Entity,
   ObjectId,
   ObjectIdColumn,
-} from "typeorm";
+} from 'typeorm';
 
 @Entity()
 export class Challenge {

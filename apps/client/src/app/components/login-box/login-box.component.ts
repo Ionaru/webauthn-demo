@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   templateUrl: './login-box.component.html',
   host: {
-    class: 'w-full bg-white shadow max-w-md',
+    class: 'min-w-96 bg-white shadow',
   },
 })
 export class LoginBoxComponent {}

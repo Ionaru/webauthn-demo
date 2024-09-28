@@ -33,6 +33,8 @@ export class HomePage {
 
   isLoading = signal(false);
 
+  readonly error = signal('');
+
   async login() {
     this.isLoading.set(true);
     try {
@@ -50,8 +52,8 @@ export class HomePage {
 
       const response = credential.response as AuthenticatorAssertionResponse;
 
-      this.#authService
-        .login$({
+      await firstValueFrom(
+        this.#authService.login$({
           id: credential.id,
           rawId: utils.toBase64url(credential.rawId),
           type: 'public-key',
@@ -64,8 +66,11 @@ export class HomePage {
               ? utils.toBase64url(response.userHandle)
               : undefined,
           },
-        })
-        .subscribe();
+        }),
+      );
+    } catch (error: any) {
+      this.error.set(error.message);
+      throw error;
     } finally {
       this.isLoading.set(false);
     }

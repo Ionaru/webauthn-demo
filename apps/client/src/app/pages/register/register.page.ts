@@ -46,6 +46,8 @@ export class RegisterPage {
 
   readonly isLoading = signal(false);
 
+  readonly error = signal('');
+
   async register() {
     this.isLoading.set(true);
 
@@ -65,8 +67,8 @@ export class RegisterPage {
 
       const response = credential.response as AuthenticatorAttestationResponse;
 
-      this.#authService
-        .register$({
+      await firstValueFrom(
+        this.#authService.register$({
           id: credential.id,
           rawId: utils.toBase64url(credential.rawId),
           type: 'public-key',
@@ -86,8 +88,11 @@ export class RegisterPage {
             publicKey: utils.toBase64url(response.getPublicKey()!),
             publicKeyAlgorithm: response.getPublicKeyAlgorithm(),
           },
-        })
-        .subscribe();
+        }),
+      );
+    } catch (error: any) {
+      this.error.set(error.message);
+      throw error;
     } finally {
       this.isLoading.set(false);
     }

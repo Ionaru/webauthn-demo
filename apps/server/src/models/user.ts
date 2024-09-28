@@ -4,16 +4,16 @@ import {
   Entity,
   ObjectId,
   ObjectIdColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Credential } from "./credential";
+import { Credential } from './credential';
 
 @Entity()
 export class User {
   @ObjectIdColumn()
   id!: ObjectId;
 
-  @Column({ type: "string" })
+  @Column({ type: 'string' })
   username!: string;
 
   @Column(() => Credential, { array: true })

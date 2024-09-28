@@ -36,12 +36,15 @@ export class SecurePage {
   readonly isLoading = signal(false);
   readonly user = toSignal(this.#authService.user$);
 
+  readonly error = signal('');
+
   logout() {
     this.#authService.logout$().subscribe();
   }
 
   async addPasskey() {
     this.isLoading.set(true);
+    this.error.set('');
 
     try {
       const challenge = await firstValueFrom(this.#authService.getChallenge$());
@@ -62,8 +65,8 @@ export class SecurePage {
 
       const response = credential.response as AuthenticatorAttestationResponse;
 
-      this.#authService
-        .addPasskey$({
+      await firstValueFrom(
+        this.#authService.addPasskey$({
           id: credential.id,
           rawId: utils.toBase64url(credential.rawId),
           type: 'public-key',
@@ -83,8 +86,11 @@ export class SecurePage {
             publicKey: utils.toBase64url(response.getPublicKey()!),
             publicKeyAlgorithm: response.getPublicKeyAlgorithm(),
           },
-        })
-        .subscribe();
+        }),
+      );
+    } catch (error: any) {
+      this.error.set(error.message);
+      throw error;
     } finally {
       this.isLoading.set(false);
     }

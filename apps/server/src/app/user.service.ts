@@ -5,9 +5,10 @@ import {
   AuthenticationJSON,
   RegistrationJSON,
 } from '@passwordless-id/webauthn/dist/esm/types.js';
-import { MongoRepository, ObjectId } from 'typeorm';
+import { ObjectId } from 'mongodb';
+import { MongoRepository } from 'typeorm';
 
-import { Credential } from "../models/credential";
+import { Credential } from '../models/credential';
 import { User } from '../models/user';
 
 import { ChallengeService } from './challenge.service';
@@ -16,7 +17,6 @@ const fromBase64 = (data: string) => Buffer.from(data, 'base64').toString();
 
 @Injectable()
 export class UserService {
-
   constructor(
     @InjectRepository(User)
     private readonly userRepository: MongoRepository<User>,
@@ -25,7 +25,7 @@ export class UserService {
 
   async loginUser(authentication: AuthenticationJSON): Promise<User | null> {
     const matchingUser = await this.userRepository.findOneBy({
-      "credentials.id": authentication.id,
+      'credentials.id': authentication.id,
     });
     if (!matchingUser) {
       throw new HttpException('User not found', 404);
@@ -87,7 +87,7 @@ export class UserService {
       _id: ObjectId.createFromHexString(user),
     });
     if (!existingUser) {
-      throw new Error("User does not exist");
+      throw new Error('User does not exist');
     }
 
     const credential = new Credential();

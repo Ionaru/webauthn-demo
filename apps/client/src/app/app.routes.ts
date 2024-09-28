@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 
 import { handhake } from './guards/handshake.guard';
 import { isLoggedIn, isLoggoutOut } from './guards/is-logged-in.guard';
+import { AdminPage } from './pages/admin/admin.page';
 import { HomePage } from './pages/home/home.page';
 import { RegisterPage } from './pages/register/register.page';
 import { SecurePage } from './pages/secure/secure.page';
@@ -18,6 +19,7 @@ export const appRoutes: Route[] = [
         canActivate: [isLoggoutOut],
       },
       { path: 'secure', component: SecurePage, canActivate: [isLoggedIn] },
+      { path: 'users', component: AdminPage, canActivate: [] },
     ],
   },
 ];

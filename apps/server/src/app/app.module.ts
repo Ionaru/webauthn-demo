@@ -1,6 +1,6 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Logger, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import mongo from 'connect-mongo';
@@ -9,6 +9,8 @@ import { NestSessionOptions, SessionModule } from 'nestjs-session';
 import { Challenge } from '../models/challenge';
 import { User } from '../models/user';
 
+import { AdminController } from './admin.controller';
+import { AdminService } from './admin.service';
 import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { ChallengeService } from './challenge.service';
@@ -25,16 +27,16 @@ let sessionStore: mongo | undefined;
         config: ConfigService,
       ): Promise<NestSessionOptions> => {
         sessionStore = mongo.create({
-          dbName: config.getOrThrow("DB_NAME"),
-          mongoUrl: config.getOrThrow("DB_URL"),
-          collectionName: 'session'
+          dbName: config.getOrThrow('DB_NAME'),
+          mongoUrl: config.getOrThrow('DB_URL'),
+          collectionName: 'session',
         });
         return {
           session: {
-            name: config.getOrThrow("SESSION_NAME"),
+            name: config.getOrThrow('SESSION_NAME'),
             resave: false,
             saveUninitialized: false,
-            secret: config.getOrThrow("SESSION_SECRET"),
+            secret: config.getOrThrow('SESSION_SECRET'),
             store: sessionStore,
           },
         };
@@ -51,22 +53,22 @@ let sessionStore: mongo | undefined;
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const database = configService.getOrThrow("DB_NAME");
+        const database = configService.getOrThrow('DB_NAME');
         Logger.log(`Using database: ${database}`, AppModule.name);
         return {
           database,
           entities: [Challenge, User],
           extra: {
-            authSource: "admin",
+            authSource: 'admin',
           },
-          type: "mongodb",
-          url: configService.getOrThrow("DB_URL"),
+          type: 'mongodb',
+          url: configService.getOrThrow('DB_URL'),
         };
       },
     }),
     TypeOrmModule.forFeature([Challenge, User]),
   ],
-  controllers: [AppController],
-  providers: [ChallengeService, UserService, AppResolver],
+  controllers: [AppController, AdminController],
+  providers: [ChallengeService, UserService, AppResolver, AdminService],
 })
 export class AppModule {}

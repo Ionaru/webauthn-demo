@@ -8,7 +8,6 @@ import { Challenge } from '../models/challenge';
 
 @Injectable()
 export class ChallengeService {
-
   readonly #challengeTimeout = 5 * 60_000;
 
   constructor(
@@ -18,7 +17,7 @@ export class ChallengeService {
 
   async create(): Promise<string> {
     await this.#deleteOldChallenges();
-    const challenge = randomBytes(64).toString("base64url");
+    const challenge = randomBytes(64).toString('base64url');
 
     const newChallenge = this.challengeRepository.create({ challenge });
     await this.challengeRepository.save(newChallenge);
