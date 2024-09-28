@@ -1,7 +1,7 @@
 import type {
   AuthenticationJSON,
   RegistrationJSON,
-} from '@passwordless-id/webauthn/dist/esm/types';
+} from '@passwordless-id/webauthn/dist/esm/types.js';
 
 type RecursiveStringify<T> = {
   [K in keyof T]: T[K] extends object ? RecursiveStringify<T[K]> : string;

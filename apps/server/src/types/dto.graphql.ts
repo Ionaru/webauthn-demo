@@ -6,7 +6,7 @@ import type {
   ExtendedAuthenticatorTransport,
   RegistrationJSON,
   User,
-} from '@passwordless-id/webauthn/dist/esm/types';
+} from '@passwordless-id/webauthn/dist/esm/types.js';
 
 import { descriptions } from './dto.common';
 

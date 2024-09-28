@@ -9,11 +9,15 @@ import {
   SessionDTO,
 } from '../types/dto.openapi';
 
-import { AppService } from './app.service';
+import { ChallengeService } from './challenge.service';
+import { UserService } from './user.service';
 
 @Controller('/api')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly challengeService: ChallengeService,
+    private readonly userService: UserService,
+  ) {}
 
   @ApiTags('Authentication')
   @Get('user')
@@ -38,7 +42,7 @@ export class AppController {
     description: 'base64url encoded random string',
   })
   createChallenge() {
-    return this.appService.createChallenge();
+    return this.challengeService.create();
   }
 
   @ApiTags('Authentication')
@@ -52,9 +56,9 @@ export class AppController {
     @Body() data: AuthenticationDTO,
     @Session() session: Request['session'],
   ) {
-    const result = await this.appService.loginUser(data);
+    const result = await this.userService.loginUser(data);
     if (result) {
-      session.userId = result.id;
+      session.userId = result.id.toHexString();
       session.user = result.username;
     }
     return bindCallback(session.save.bind(session))().pipe(
@@ -77,7 +81,7 @@ export class AppController {
       throw new Error('User not logged in');
     }
 
-    return this.appService.addPasskey(session.userId, data);
+    return this.userService.addPasskey(session.userId, data);
   }
 
   @ApiTags('Registration')
@@ -88,7 +92,7 @@ export class AppController {
     description: 'Whether the user was registered',
   })
   registerUser(@Body() data: RegistrationDTO) {
-    return this.appService.registerUser(data);
+    return this.userService.registerUser(data);
   }
 
   @ApiTags('Authentication')

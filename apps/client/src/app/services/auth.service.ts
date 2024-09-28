@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import type {
   AuthenticationJSON,
   RegistrationJSON,
-} from '@passwordless-id/webauthn/dist/esm/types';
+} from '@passwordless-id/webauthn/dist/esm/types.js';
 import { Apollo } from 'apollo-angular';
 import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 

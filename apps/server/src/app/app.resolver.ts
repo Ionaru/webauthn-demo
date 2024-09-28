@@ -8,11 +8,15 @@ import {
   SessionDTO,
 } from '../types/dto.graphql';
 
-import { AppService } from './app.service';
+import { ChallengeService } from './challenge.service';
+import { UserService } from './user.service';
 
 @Resolver()
 export class AppResolver {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly challengeService: ChallengeService,
+    private readonly userService: UserService,
+  ) {}
 
   @Query(() => SessionDTO, {
     nullable: true,
@@ -25,7 +29,7 @@ export class AppResolver {
 
   @Mutation(() => String, { description: 'base64url encoded random string' })
   createChallenge() {
-    return this.appService.createChallenge();
+    return this.challengeService.create();
   }
 
   @Mutation(() => Boolean)
@@ -33,9 +37,9 @@ export class AppResolver {
     @Args() queryArguments: AuthenticationDTO,
     @Context() { req: { session } }: { req: Request },
   ) {
-    const result = await this.appService.loginUser(queryArguments);
+    const result = await this.userService.loginUser(queryArguments);
     if (result) {
-      session.userId = result.id;
+      session.userId = result.id.toHexString();
       session.user = result.username;
     }
     return bindCallback(session.save.bind(session))().pipe(
@@ -52,12 +56,12 @@ export class AppResolver {
       throw new Error('User not logged in');
     }
 
-    return this.appService.addPasskey(session.userId, queryArguments);
+    return this.userService.addPasskey(session.userId, queryArguments);
   }
 
   @Mutation(() => Boolean)
   registerUser(@Args() queryArguments: RegistrationDTO) {
-    return this.appService.registerUser(queryArguments);
+    return this.userService.registerUser(queryArguments);
   }
 
   @Mutation(() => Boolean)

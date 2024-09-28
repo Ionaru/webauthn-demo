@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import {
   ExtendedAuthenticatorTransport,
   NamedAlgo,
-} from '@passwordless-id/webauthn/dist/esm/types';
+} from '@passwordless-id/webauthn/dist/esm/types.js';
 
 interface Credential {
   id: string;
