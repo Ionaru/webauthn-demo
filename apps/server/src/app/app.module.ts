@@ -27,16 +27,16 @@ let sessionStore: mongo | undefined;
         config: ConfigService,
       ): Promise<NestSessionOptions> => {
         sessionStore = mongo.create({
-          dbName: config.getOrThrow('DB_NAME'),
-          mongoUrl: config.getOrThrow('DB_URL'),
+          dbName: config.getOrThrow('WD_DB_NAME'),
+          mongoUrl: config.getOrThrow('WD_DB_URL'),
           collectionName: 'session',
         });
         return {
           session: {
-            name: config.getOrThrow('SESSION_NAME'),
+            name: config.getOrThrow('WD_SESSION_NAME'),
             resave: false,
             saveUninitialized: false,
-            secret: config.getOrThrow('SESSION_SECRET'),
+            secret: config.getOrThrow('WD_SESSION_SECRET'),
             store: sessionStore,
           },
         };
@@ -48,12 +48,13 @@ let sessionStore: mongo | undefined;
       driver: ApolloDriver,
       introspection: true,
       sortSchema: true,
+      playground: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const database = configService.getOrThrow('DB_NAME');
+        const database = configService.getOrThrow('WD_DB_NAME');
         Logger.log(`Using database: ${database}`, AppModule.name);
         return {
           database,
@@ -62,7 +63,7 @@ let sessionStore: mongo | undefined;
             authSource: 'admin',
           },
           type: 'mongodb',
-          url: configService.getOrThrow('DB_URL'),
+          url: configService.getOrThrow('WD_DB_URL'),
         };
       },
     }),

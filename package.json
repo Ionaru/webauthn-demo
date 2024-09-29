@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test",
     "dev": "nx run-many --target=serve --parallel 99",
     "format": "prettier --write . && nx run-many --skip-nx-cache --target=lint --all --fix",
     "generate-gql-types": "npx graphql-zeus@latest schema.graphql --typedDocumentNode apps/client/src/app && node tools/patch-zeus.js"
