@@ -27,3 +27,16 @@ services:
       server:
         condition: service_healthy
     restart: unless-stopped
+
+  db:
+    image: mongo:latest
+    profiles: [local]
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - db-volume:/data/db
+
+volumes:
+  db-volume:
