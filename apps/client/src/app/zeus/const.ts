@@ -34,6 +34,7 @@ export const ReturnTypes: Record<string,any> = {
 		registerUser:"Boolean"
 	},
 	Query:{
+		secret:"String",
 		session:"SessionDTO"
 	},
 	SessionDTO:{

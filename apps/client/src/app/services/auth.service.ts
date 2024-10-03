@@ -13,6 +13,7 @@ import {
   loginMutation,
   logoutMutation,
   registerMutation,
+  secretQuery,
   sessionQuery,
 } from '../utils/graphql';
 
@@ -165,6 +166,21 @@ export class AuthService {
         tap(() => this.#userSubject.next(null)),
         switchMap(() => this.#router.navigate(['/'])),
         tap(() => console.log('Logout done!')),
+      );
+  }
+
+  secret$() {
+    console.log('Start getSecret!');
+    return this.#apollo
+      .watchQuery({
+        fetchPolicy: 'no-cache',
+        useInitialLoading: false,
+        query: secretQuery,
+      })
+      .valueChanges.pipe(
+        tap((result) => console.log('getSecret result:', result)),
+        map((result) => result.data?.secret),
+        tap(() => console.log('End getSecret!')),
       );
   }
 }

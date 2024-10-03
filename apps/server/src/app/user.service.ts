@@ -100,4 +100,36 @@ export class UserService {
 
     return true;
   }
+
+  /**
+   * Generates a secret string based on the user ID
+   */
+  getSecret(userId: string) {
+    const characters = [...userId];
+    return characters
+      .map((character) => {
+        switch (character) {
+          case '1':
+          case '2':
+          case '3':
+          case '4':
+          case '5':
+          case '7': {
+            return '0';
+          }
+          case '0':
+          case '6':
+          case '9': {
+            return '1';
+          }
+          case '8': {
+            return '2';
+          }
+          default: {
+            return '';
+          }
+        }
+      })
+      .join('');
+  }
 }

@@ -1,3 +1,4 @@
+import { UnauthorizedException } from '@nestjs/common';
 import type {
   AuthenticationJSON,
   RegistrationJSON,
@@ -35,3 +36,5 @@ export const descriptions: Readonly<
   },
   type: 'The credential type, should always be "public-key"',
 };
+
+export const notLoggedInError = new UnauthorizedException('User not logged in');

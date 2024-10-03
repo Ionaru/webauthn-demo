@@ -14,11 +14,11 @@ import { descriptions } from './dto.common';
 export class SessionDTO {
   @Field(() => String, {
     nullable: true,
-    description: 'User ID in UUID format',
+    description: descriptions.user.id,
   })
   userId?: string;
 
-  @Field(() => String, { nullable: true, description: 'The chosen username' })
+  @Field(() => String, { nullable: true, description: descriptions.user.name })
   user?: string;
 }
 

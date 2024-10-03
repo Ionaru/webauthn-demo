@@ -87,15 +87,18 @@ type Mutation {
 }
 
 type Query {
+  """Your personal secret"""
+  secret: String!
+
   """User session with ID and username, will return null if not logged in"""
   session: SessionDTO
 }
 
 type SessionDTO {
-  """The chosen username"""
+  """Name of the user"""
   user: String
 
-  """User ID in UUID format"""
+  """ID of the user"""
   userId: String
 }
 

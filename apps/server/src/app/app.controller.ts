@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, Session } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Request } from 'express';
 import { bindCallback, map } from 'rxjs';
 
+import { notLoggedInError } from '../types/dto.common';
 import {
   AuthenticationDTO,
   RegistrationDTO,
@@ -78,7 +79,7 @@ export class AppController {
     @Session() session: Request['session'],
   ) {
     if (!session.userId) {
-      throw new Error('User not logged in');
+      throw notLoggedInError;
     }
 
     return this.userService.addPasskey(session.userId, data);
@@ -99,5 +100,21 @@ export class AppController {
   @Post('logout')
   logoutUser(@Session() session: Request['session']) {
     return bindCallback(session.destroy.bind(session))().pipe(map(() => true));
+  }
+
+  @ApiTags('Secure')
+  @Get('secret')
+  @ApiUnauthorizedResponse({ description: notLoggedInError.message })
+  @ApiResponse({
+    status: 200,
+    type: String,
+    description: 'Your personal secret',
+  })
+  getSecret(@Session() session: Request['session']) {
+    if (!session.userId) {
+      throw notLoggedInError;
+    }
+
+    return this.userService.getSecret(session.userId);
   }
 }

@@ -79,3 +79,7 @@ export const addPasskeyMutation = typedGql('mutation')({
 export const logoutMutation = typedGql('mutation')({
   logoutUser: true,
 });
+
+export const secretQuery = typedGql('query')({
+  secret: true,
+});

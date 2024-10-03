@@ -11,10 +11,10 @@ import type {
 import { descriptions } from './dto.common';
 
 export class SessionDTO {
-  @ApiProperty({ nullable: true, description: 'User ID in UUID format' })
+  @ApiProperty({ nullable: true, description: descriptions.user.id })
   userId?: string;
 
-  @ApiProperty({ nullable: true, description: 'The chosen username' })
+  @ApiProperty({ nullable: true, description: descriptions.user.name })
   user?: string;
 }
 

@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: deploy/server.Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - WD_DB_URL
       - WD_DB_NAME
@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: deploy/client.Dockerfile
     ports:
-      - "${WD_CLIENT_PORT:-80}:80"
+      - '${WD_CLIENT_PORT:-80}:80'
     depends_on:
       server:
         condition: service_healthy

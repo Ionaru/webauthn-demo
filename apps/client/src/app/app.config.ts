@@ -1,14 +1,11 @@
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { ApolloClientOptions, InMemoryCache } from '@apollo/client/core';
-import {
-  APOLLO_FLAGS,
-  APOLLO_OPTIONS,
-  ApolloModule,
-  Flags,
-} from 'apollo-angular';
+import { InMemoryCache } from '@apollo/client/core';
+import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
+
+import { environment } from '../environment/environment';
 
 import { appRoutes } from './app.routes';
 
@@ -16,22 +13,18 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(withFetch()),
     provideRouter(appRoutes),
-    importProvidersFrom(ApolloModule),
-    {
-      provide: APOLLO_FLAGS,
-      useFactory: (): Flags => ({
+    provideApollo(
+      () => {
+        const httpLink = inject(HttpLink);
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({ uri: `${environment.baseUrl}/graphql` }),
+        };
+      },
+      {
         useInitialLoading: true,
         useMutationLoading: true,
-      }),
-    },
-    {
-      deps: [HttpLink],
-      provide: APOLLO_OPTIONS,
-      useFactory: (httpLink: HttpLink): ApolloClientOptions<unknown> => ({
-        cache: new InMemoryCache(),
-        connectToDevTools: false,
-        link: httpLink.create({ uri: 'https://webauthn-workshop.app/graphql' }),
-      }),
-    },
+      },
+    ),
   ],
 };

@@ -4,8 +4,8 @@ This is a demo application for the [WebAuthn API](https://developer.mozilla.org/
 
 ## Running the app
 
-
 ### Prerequisites (either)
+
 - Node.js 20+
 - Docker
 - A mongoDB database (see below)
@@ -28,7 +28,6 @@ This is a demo application for the [WebAuthn API](https://developer.mozilla.org/
 
 - Run `docker compose up` to start the application
 - Open http://localhost:80 in your browser
-
 
 ## Mongo
 

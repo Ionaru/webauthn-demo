@@ -280,6 +280,27 @@ export const Gql = Chain(HOST, {
 
 export const ZeusScalars = ZeusSelect<ScalarCoders>();
 
+type ScalarsSelector<T> = {
+  [X in Required<{
+    [P in keyof T]: T[P] extends number | string | undefined | boolean ? P : never;
+  }>[keyof T]]: true;
+};
+
+export const fields = <T extends keyof ModelTypes>(k: T) => {
+  const t = ReturnTypes[k];
+  const o = Object.fromEntries(
+    Object.entries(t)
+      .filter(([, value]) => {
+        const isReturnType = ReturnTypes[value as string];
+        if (!isReturnType || (typeof isReturnType === 'string' && isReturnType.startsWith('scalar.'))) {
+          return true;
+        }
+      })
+      .map(([key]) => [key, true as const]),
+  );
+  return o as ScalarsSelector<ModelTypes[T]>;
+};
+
 export const decodeScalarsInResponse = <O extends Operations>({
   response,
   scalars,
@@ -867,82 +888,134 @@ type ZEUS_UNIONS = never
 
 export type ValueTypes = {
     ["AuthenticatorAssertionResponseDTO"]: {
+	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string | Variable<any, string>,
+	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string | Variable<any, string>,
+	/** base64url encoded AuthenticatorAttestationResponse.signature */
 	signature: string | Variable<any, string>,
+	/** base64url encoded AuthenticatorAssertionResponse.userHandle */
 	userHandle?: string | undefined | null | Variable<any, string>
 };
 	["AuthenticatorAttestationResponseDTO"]: {
+	/** base64url encoded AuthenticatorAttestationResponse.attestationObject */
 	attestationObject: string | Variable<any, string>,
+	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string | Variable<any, string>,
+	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string | Variable<any, string>,
+	/** base64url encoded AuthenticatorAttestationResponse.getPublicKey */
 	publicKey: string | Variable<any, string>,
+	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number */
 	publicKeyAlgorithm: number | Variable<any, string>,
+	/** AuthenticatorAttestationResponse.transports */
 	transports: Array<string> | Variable<any, string>
 };
 	["Mutation"]: AliasType<{
-addUserCredential?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
+addUserCredential?: [{	/** ID of the credential, this should be created by the authenticator */
+	id: string | Variable<any, string>,	/** base64url encoded version of the credential ID */
+	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	/** The credential type, should always be "public-key" */
+	type: string | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
 	/** base64url encoded random string */
 	createChallenge?:boolean | `@${string}`,
-loginUser?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAssertionResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>},boolean | `@${string}`],
+loginUser?: [{	/** ID of the credential, this should be created by the authenticator */
+	id: string | Variable<any, string>,	/** base64url encoded version of the credential ID */
+	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAssertionResponseDTO"] | Variable<any, string>,	/** The credential type, should always be "public-key" */
+	type: string | Variable<any, string>},boolean | `@${string}`],
 	logoutUser?:boolean | `@${string}`,
-registerUser?: [{	id: string | Variable<any, string>,	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	type: string | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
+registerUser?: [{	/** ID of the credential, this should be created by the authenticator */
+	id: string | Variable<any, string>,	/** base64url encoded version of the credential ID */
+	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	/** The credential type, should always be "public-key" */
+	type: string | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
+	/** Your personal secret */
+	secret?:boolean | `@${string}`,
 	/** User session with ID and username, will return null if not logged in */
 	session?:ValueTypes["SessionDTO"],
 		__typename?: boolean | `@${string}`
 }>;
 	["SessionDTO"]: AliasType<{
+	/** Name of the user */
 	user?:boolean | `@${string}`,
+	/** ID of the user */
 	userId?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["UserDTO"]: {
+	/** Display name of the user */
 	displayName?: string | undefined | null | Variable<any, string>,
+	/** ID of the user */
 	id: string | Variable<any, string>,
+	/** Name of the user */
 	name: string | Variable<any, string>
 }
   }
 
 export type ResolverInputTypes = {
     ["AuthenticatorAssertionResponseDTO"]: {
+	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
+	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
+	/** base64url encoded AuthenticatorAttestationResponse.signature */
 	signature: string,
+	/** base64url encoded AuthenticatorAssertionResponse.userHandle */
 	userHandle?: string | undefined | null
 };
 	["AuthenticatorAttestationResponseDTO"]: {
+	/** base64url encoded AuthenticatorAttestationResponse.attestationObject */
 	attestationObject: string,
+	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
+	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
+	/** base64url encoded AuthenticatorAttestationResponse.getPublicKey */
 	publicKey: string,
+	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number */
 	publicKeyAlgorithm: number,
+	/** AuthenticatorAttestationResponse.transports */
 	transports: Array<string>
 };
 	["Mutation"]: AliasType<{
-addUserCredential?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	type: string,	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
+addUserCredential?: [{	/** ID of the credential, this should be created by the authenticator */
+	id: string,	/** base64url encoded version of the credential ID */
+	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	/** The credential type, should always be "public-key" */
+	type: string,	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
 	/** base64url encoded random string */
 	createChallenge?:boolean | `@${string}`,
-loginUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAssertionResponseDTO"],	type: string},boolean | `@${string}`],
+loginUser?: [{	/** ID of the credential, this should be created by the authenticator */
+	id: string,	/** base64url encoded version of the credential ID */
+	rawId: string,	response: ResolverInputTypes["AuthenticatorAssertionResponseDTO"],	/** The credential type, should always be "public-key" */
+	type: string},boolean | `@${string}`],
 	logoutUser?:boolean | `@${string}`,
-registerUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	type: string,	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
+registerUser?: [{	/** ID of the credential, this should be created by the authenticator */
+	id: string,	/** base64url encoded version of the credential ID */
+	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	/** The credential type, should always be "public-key" */
+	type: string,	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
+	/** Your personal secret */
+	secret?:boolean | `@${string}`,
 	/** User session with ID and username, will return null if not logged in */
 	session?:ResolverInputTypes["SessionDTO"],
 		__typename?: boolean | `@${string}`
 }>;
 	["SessionDTO"]: AliasType<{
+	/** Name of the user */
 	user?:boolean | `@${string}`,
+	/** ID of the user */
 	userId?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["UserDTO"]: {
+	/** Display name of the user */
 	displayName?: string | undefined | null,
+	/** ID of the user */
 	id: string,
+	/** Name of the user */
 	name: string
 };
 	["schema"]: AliasType<{
@@ -954,17 +1027,27 @@ registerUser?: [{	id: string,	rawId: string,	response: ResolverInputTypes["Authe
 
 export type ModelTypes = {
     ["AuthenticatorAssertionResponseDTO"]: {
+	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
+	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
+	/** base64url encoded AuthenticatorAttestationResponse.signature */
 	signature: string,
+	/** base64url encoded AuthenticatorAssertionResponse.userHandle */
 	userHandle?: string | undefined
 };
 	["AuthenticatorAttestationResponseDTO"]: {
+	/** base64url encoded AuthenticatorAttestationResponse.attestationObject */
 	attestationObject: string,
+	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
+	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
+	/** base64url encoded AuthenticatorAttestationResponse.getPublicKey */
 	publicKey: string,
+	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number */
 	publicKeyAlgorithm: number,
+	/** AuthenticatorAttestationResponse.transports */
 	transports: Array<string>
 };
 	["Mutation"]: {
@@ -976,16 +1059,23 @@ export type ModelTypes = {
 	registerUser: boolean
 };
 	["Query"]: {
-		/** User session with ID and username, will return null if not logged in */
+		/** Your personal secret */
+	secret: string,
+	/** User session with ID and username, will return null if not logged in */
 	session?: ModelTypes["SessionDTO"] | undefined
 };
 	["SessionDTO"]: {
-		user?: string | undefined,
+		/** Name of the user */
+	user?: string | undefined,
+	/** ID of the user */
 	userId?: string | undefined
 };
 	["UserDTO"]: {
+	/** Display name of the user */
 	displayName?: string | undefined,
+	/** ID of the user */
 	id: string,
+	/** Name of the user */
 	name: string
 };
 	["schema"]: {
@@ -999,17 +1089,27 @@ export type GraphQLTypes = {
 	// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY);
 	// ------------------------------------------------------;
 	["AuthenticatorAssertionResponseDTO"]: {
-		authenticatorData: string,
+		/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+	authenticatorData: string,
+	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
+	/** base64url encoded AuthenticatorAttestationResponse.signature */
 	signature: string,
+	/** base64url encoded AuthenticatorAssertionResponse.userHandle */
 	userHandle?: string | undefined
 };
 	["AuthenticatorAttestationResponseDTO"]: {
-		attestationObject: string,
+		/** base64url encoded AuthenticatorAttestationResponse.attestationObject */
+	attestationObject: string,
+	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
+	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
+	/** base64url encoded AuthenticatorAttestationResponse.getPublicKey */
 	publicKey: string,
+	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number */
 	publicKeyAlgorithm: number,
+	/** AuthenticatorAttestationResponse.transports */
 	transports: Array<string>
 };
 	["Mutation"]: {
@@ -1023,17 +1123,24 @@ export type GraphQLTypes = {
 };
 	["Query"]: {
 	__typename: "Query",
+	/** Your personal secret */
+	secret: string,
 	/** User session with ID and username, will return null if not logged in */
 	session?: GraphQLTypes["SessionDTO"] | undefined
 };
 	["SessionDTO"]: {
 	__typename: "SessionDTO",
+	/** Name of the user */
 	user?: string | undefined,
+	/** ID of the user */
 	userId?: string | undefined
 };
 	["UserDTO"]: {
-		displayName?: string | undefined,
+		/** Display name of the user */
+	displayName?: string | undefined,
+	/** ID of the user */
 	id: string,
+	/** Name of the user */
 	name: string
 }
     }

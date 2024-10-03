@@ -35,6 +35,7 @@ export class SecurePage {
 
   readonly isLoading = signal(false);
   readonly user = toSignal(this.#authService.user$);
+  readonly secret = toSignal(this.#authService.secret$());
 
   readonly error = signal('');
 

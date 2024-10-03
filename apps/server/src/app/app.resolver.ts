@@ -2,6 +2,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 import { bindCallback, map } from 'rxjs';
 
+import { notLoggedInError } from '../types/dto.common';
 import {
   AuthenticationDTO,
   RegistrationDTO,
@@ -53,7 +54,7 @@ export class AppResolver {
     @Context() { req: { session } }: { req: Request },
   ) {
     if (!session.userId) {
-      throw new Error('User not logged in');
+      throw notLoggedInError;
     }
 
     return this.userService.addPasskey(session.userId, queryArguments);
@@ -67,5 +68,16 @@ export class AppResolver {
   @Mutation(() => Boolean)
   logoutUser(@Context() { req: { session } }: { req: Request }) {
     return bindCallback(session.destroy.bind(session))().pipe(map(() => true));
+  }
+
+  @Query(() => String, {
+    description: 'Your personal secret',
+  })
+  secret(@Context() { req: { session } }: { req: Request }) {
+    if (!session.userId) {
+      throw notLoggedInError;
+    }
+
+    return this.userService.getSecret(session.userId);
   }
 }

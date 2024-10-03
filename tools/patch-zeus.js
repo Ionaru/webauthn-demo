@@ -1,4 +1,4 @@
-const fs = require('node:fs');
+import * as fs from 'node:fs';
 
 const path = 'apps/client/src/app/zeus/index.ts';
 const data = fs.readFileSync(path).toString().split('\n');
