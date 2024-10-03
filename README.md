@@ -12,7 +12,7 @@ This is a demo application for the [WebAuthn API](https://developer.mozilla.org/
 
 #### Environment variables
 
-- `WD_DB_URL`: The URL of the database
+- `WD_DB_URL`: The URL of the database (For example `mongodb://root:root@db/`)
 - `WD_DB_NAME`: The name of the database
 - `WD_SESSION_NAME`: The name of the session
 - `WD_SESSION_SECRET`: The secret of the session
@@ -34,4 +34,4 @@ This is a demo application for the [WebAuthn API](https://developer.mozilla.org/
 
 The application uses a mongoDB database to store the users and sessions.
 
-Use docker to start a mongoDB instance: ``
+Use docker to start a mongoDB instance: `docker compose up db`

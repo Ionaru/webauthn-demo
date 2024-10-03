@@ -30,7 +30,7 @@ export const appConfig: ApplicationConfig = {
       useFactory: (httpLink: HttpLink): ApolloClientOptions<unknown> => ({
         cache: new InMemoryCache(),
         connectToDevTools: false,
-        link: httpLink.create({ uri: '/graphql' }),
+        link: httpLink.create({ uri: 'https://webauthn-workshop.app/graphql' }),
       }),
     },
   ],
