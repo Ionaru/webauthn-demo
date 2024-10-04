@@ -49,12 +49,22 @@ export class AppResolver {
   }
 
   @Mutation(() => Boolean)
-  addUserCredential(
+  async addUserCredential(
     @Args() queryArguments: RegistrationDTO,
-    @Context() { req: { session } }: { req: Request },
+    @Context() { req: { headers, session } }: { req: Request },
   ) {
-    if (!session.userId) {
+    const authorization = headers.authorization?.replace('Bearer ', '');
+    if (!authorization && !session.userId) {
       throw notLoggedInError;
+    }
+
+    if (authorization) {
+      const user = await this.userService.checkApiKey(authorization);
+      if (!user) {
+        throw notLoggedInError;
+      }
+
+      return this.userService.getSecret(user.id.toHexString());
     }
 
     return this.userService.addPasskey(session.userId, queryArguments);

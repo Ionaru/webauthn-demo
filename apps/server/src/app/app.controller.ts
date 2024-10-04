@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { Body, Controller, Get, Post, Session, Headers } from '@nestjs/common';
+import { Body, Controller, Get, Post, Session, Req } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiProduces,
@@ -78,17 +78,29 @@ export class AppController {
 
   @ApiTags('Registration')
   @Post('user/credential')
+  @ApiBearerAuth()
   @ApiResponse({
     status: 201,
     type: Boolean,
     description: 'Whether the credential was added',
   })
-  addUserCredential(
+  async addUserCredential(
     @Body() data: RegistrationDTO,
+    @Req() request: Request,
     @Session() session: Request['session'],
   ) {
-    if (!session.userId) {
+    const authorization = request.headers.authorization?.replace('Bearer ', '');
+    if (!authorization && !session.userId) {
       throw notLoggedInError;
+    }
+
+    if (authorization) {
+      const user = await this.userService.checkApiKey(authorization);
+      if (!user) {
+        throw notLoggedInError;
+      }
+
+      return this.userService.addPasskey(user.id.toHexString(), data);
     }
 
     return this.userService.addPasskey(session.userId, data);
@@ -122,10 +134,10 @@ export class AppController {
     description: 'Your personal secret',
   })
   async getSecret(
+    @Req() request: Request,
     @Session() session: Request['session'],
-    @Headers('Authorization') authorization: string,
   ) {
-    authorization = authorization.replace('Bearer ', '');
+    const authorization = request.headers.authorization?.replace('Bearer ', '');
     if (!authorization && !session.userId) {
       throw notLoggedInError;
     }
