@@ -1,4 +1,4 @@
-<app-page>
+<app-page [error]="error()">
   <app-banner />
   <app-login-box>
     @if (isLoading()) {
@@ -9,6 +9,7 @@
     <h1 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">
       Hello {{user()}}!
     </h1>
+    <p>Your secret is: {{secret()}}</p>
     <button class="space-y-6" app-button (click)="addPasskey()">
       <fa-icon [icon]="passKeyIcon" [fixedWidth]="true" />
       Add passkey

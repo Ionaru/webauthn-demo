@@ -3,6 +3,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
+import { utils } from '@passwordless-id/webauthn';
 import { firstValueFrom } from 'rxjs';
 import { animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 
@@ -12,7 +13,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import { buildCredentialCreationOptions, encodeCredential } from '../../utils/webauthn';
+import { buildCredentialCreationOptions } from '../../utils/webauthn';
 
 @Component({
   standalone: true,
@@ -45,6 +46,8 @@ export class RegisterPage {
 
   readonly isLoading = signal(false);
 
+  readonly error = signal('');
+
   async register() {
     this.isLoading.set(true);
 
@@ -62,12 +65,34 @@ export class RegisterPage {
         return;
       }
 
-      const credentialId = credential.id;
       const response = credential.response as AuthenticatorAttestationResponse;
 
-      this.#authService
-        .register$(encodeCredential(credentialId, username, response))
-        .subscribe();
+      await firstValueFrom(
+        this.#authService.register$({
+          id: credential.id,
+          rawId: utils.toBase64url(credential.rawId),
+          type: 'public-key',
+          user: {
+            id: username,
+            name: username,
+            displayName: username,
+          },
+          clientExtensionResults: {},
+          response: {
+            attestationObject: utils.toBase64url(response.attestationObject),
+            authenticatorData: utils.toBase64url(
+              response.getAuthenticatorData(),
+            ),
+            clientDataJSON: utils.toBase64url(response.clientDataJSON),
+            transports: response.getTransports() as any,
+            publicKey: utils.toBase64url(response.getPublicKey()!),
+            publicKeyAlgorithm: response.getPublicKeyAlgorithm(),
+          },
+        }),
+      );
+    } catch (error: any) {
+      this.error.set(error.message);
+      throw error;
     } finally {
       this.isLoading.set(false);
     }

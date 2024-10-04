@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faKey, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { utils } from '@passwordless-id/webauthn';
 import { firstValueFrom } from 'rxjs';
 
 import { BannerComponent } from '../../components/banner/banner.component';
@@ -11,7 +12,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import { buildCredentialCreationOptions, encodeCredential } from '../../utils/webauthn';
+import { buildCredentialCreationOptions } from '../../utils/webauthn';
 
 @Component({
   templateUrl: './secure.page.html',
@@ -34,6 +35,9 @@ export class SecurePage {
 
   readonly isLoading = signal(false);
   readonly user = toSignal(this.#authService.user$);
+  readonly secret = toSignal(this.#authService.secret$());
+
+  readonly error = signal('');
 
   logout() {
     this.#authService.logout$().subscribe();
@@ -41,6 +45,7 @@ export class SecurePage {
 
   async addPasskey() {
     this.isLoading.set(true);
+    this.error.set('');
 
     try {
       const challenge = await firstValueFrom(this.#authService.getChallenge$());
@@ -59,12 +64,34 @@ export class SecurePage {
         return;
       }
 
-      const credentialId = credential.id;
       const response = credential.response as AuthenticatorAttestationResponse;
 
-      this.#authService
-        .addPasskey$(encodeCredential(credentialId, username, response))
-        .subscribe();
+      await firstValueFrom(
+        this.#authService.addPasskey$({
+          id: credential.id,
+          rawId: utils.toBase64url(credential.rawId),
+          type: 'public-key',
+          user: {
+            id: username,
+            name: username,
+            displayName: username,
+          },
+          clientExtensionResults: {},
+          response: {
+            attestationObject: utils.toBase64url(response.attestationObject),
+            authenticatorData: utils.toBase64url(
+              response.getAuthenticatorData(),
+            ),
+            clientDataJSON: utils.toBase64url(response.clientDataJSON),
+            transports: response.getTransports() as any,
+            publicKey: utils.toBase64url(response.getPublicKey()!),
+            publicKeyAlgorithm: response.getPublicKeyAlgorithm(),
+          },
+        }),
+      );
+    } catch (error: any) {
+      this.error.set(error.message);
+      throw error;
     } finally {
       this.isLoading.set(false);
     }

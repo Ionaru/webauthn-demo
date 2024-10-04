@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
+import { utils } from '@passwordless-id/webauthn';
 import { firstValueFrom } from 'rxjs';
 
 import { BannerComponent } from '../../components/banner/banner.component';
@@ -10,7 +11,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { LoginBoxComponent } from '../../components/login-box/login-box.component';
 import { PageComponent } from '../../components/page/page.component';
 import { AuthService } from '../../services/auth.service';
-import { buildCredentialRequestOptions, encodeGetCredential } from '../../utils/webauthn';
+import { buildCredentialRequestOptions } from '../../utils/webauthn';
 
 @Component({
   templateUrl: './home.page.html',
@@ -32,6 +33,8 @@ export class HomePage {
 
   isLoading = signal(false);
 
+  readonly error = signal('');
+
   async login() {
     this.isLoading.set(true);
     try {
@@ -47,12 +50,27 @@ export class HomePage {
         return;
       }
 
-      const credentialId = credential.id;
       const response = credential.response as AuthenticatorAssertionResponse;
 
-      this.#authService
-        .login$(encodeGetCredential(credentialId, response))
-        .subscribe();
+      await firstValueFrom(
+        this.#authService.login$({
+          id: credential.id,
+          rawId: utils.toBase64url(credential.rawId),
+          type: 'public-key',
+          clientExtensionResults: {},
+          response: {
+            authenticatorData: utils.toBase64url(response.authenticatorData),
+            clientDataJSON: utils.toBase64url(response.clientDataJSON),
+            signature: utils.toBase64url(response.signature),
+            userHandle: response.userHandle
+              ? utils.toBase64url(response.userHandle)
+              : undefined,
+          },
+        }),
+      );
+    } catch (error: any) {
+      this.error.set(error.message);
+      throw error;
     } finally {
       this.isLoading.set(false);
     }

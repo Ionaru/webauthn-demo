@@ -1,5 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import type {
+  AuthenticationJSON,
+  RegistrationJSON,
+} from '@passwordless-id/webauthn/dist/esm/types.js';
 import { Apollo } from 'apollo-angular';
 import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 
@@ -9,6 +13,7 @@ import {
   loginMutation,
   logoutMutation,
   registerMutation,
+  secretQuery,
   sessionQuery,
 } from '../utils/graphql';
 
@@ -31,8 +36,8 @@ export class AuthService {
       })
       .pipe(
         tap((result) => {
-          console.log('handshake user:', result.data.session.user);
-          this.#userSubject.next(result.data.session.user);
+          console.log('handshake user:', result.data.session?.user);
+          this.#userSubject.next(result.data.session?.user);
         }),
         tap(() => console.log('End handshake!', this.#userSubject.value)),
       );
@@ -53,7 +58,7 @@ export class AuthService {
       );
   }
 
-  login$(credential: string) {
+  login$(credential: AuthenticationJSON) {
     console.log('Start login!');
     return this.#apollo
       .mutate({
@@ -61,7 +66,14 @@ export class AuthService {
         useMutationLoading: false,
         mutation: loginMutation,
         variables: {
-          data: credential,
+          id: credential.id,
+          rawId: credential.rawId,
+          type: credential.type,
+
+          authenticatorData: credential.response.authenticatorData,
+          clientDataJSON: credential.response.clientDataJSON,
+          signature: credential.response.signature,
+          userHandle: credential.response.userHandle ?? '',
         },
       })
       .pipe(
@@ -77,7 +89,7 @@ export class AuthService {
       );
   }
 
-  register$(credential: string) {
+  register$(credential: RegistrationJSON) {
     console.log('Start register!');
     return this.#apollo
       .mutate({
@@ -85,7 +97,20 @@ export class AuthService {
         useMutationLoading: false,
         mutation: registerMutation,
         variables: {
-          data: credential,
+          id: credential.id,
+          rawId: credential.rawId,
+          type: credential.type,
+
+          attestationObject: credential.response.attestationObject,
+          authenticatorData: credential.response.authenticatorData,
+          clientDataJSON: credential.response.clientDataJSON,
+          transports: credential.response.transports,
+          publicKey: credential.response.publicKey,
+          publicKeyAlgorithm: credential.response.publicKeyAlgorithm,
+
+          userId: credential.user.id ?? crypto.randomUUID(),
+          userName: credential.user.name,
+          userDisplayName: credential.user.displayName,
         },
       })
       .pipe(
@@ -100,7 +125,7 @@ export class AuthService {
       );
   }
 
-  addPasskey$(credential: string) {
+  addPasskey$(credential: RegistrationJSON) {
     console.log('Start add passkey!');
     return this.#apollo
       .mutate({
@@ -108,12 +133,25 @@ export class AuthService {
         useMutationLoading: false,
         mutation: addPasskeyMutation,
         variables: {
-          data: credential,
+          id: credential.id,
+          rawId: credential.rawId,
+          type: credential.type,
+
+          attestationObject: credential.response.attestationObject,
+          authenticatorData: credential.response.authenticatorData,
+          clientDataJSON: credential.response.clientDataJSON,
+          transports: credential.response.transports,
+          publicKey: credential.response.publicKey,
+          publicKeyAlgorithm: credential.response.publicKeyAlgorithm,
+
+          userId: credential.user.id ?? crypto.randomUUID(),
+          userName: credential.user.name,
+          userDisplayName: credential.user.displayName,
         },
       })
       .pipe(
         tap((result) => console.log('Add result:', result)),
-        map((result) => result.data?.addPasskey),
+        map((result) => result.data?.addUserCredential),
         tap(() => console.log('End add passkey!')),
       );
   }
@@ -128,6 +166,21 @@ export class AuthService {
         tap(() => this.#userSubject.next(null)),
         switchMap(() => this.#router.navigate(['/'])),
         tap(() => console.log('Logout done!')),
+      );
+  }
+
+  secret$() {
+    console.log('Start getSecret!');
+    return this.#apollo
+      .watchQuery({
+        fetchPolicy: 'no-cache',
+        useInitialLoading: false,
+        query: secretQuery,
+      })
+      .valueChanges.pipe(
+        tap((result) => console.log('getSecret result:', result)),
+        map((result) => result.data?.secret),
+        tap(() => console.log('End getSecret!')),
       );
   }
 }

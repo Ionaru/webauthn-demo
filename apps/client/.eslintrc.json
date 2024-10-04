@@ -33,7 +33,8 @@
           {
             "suffixes": ["Component", "Page"]
           }
-        ]
+        ],
+        "@angular-eslint/no-host-metadata-property": "off"
       }
     },
     {

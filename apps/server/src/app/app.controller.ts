@@ -1,0 +1,120 @@
+import { Body, Controller, Get, Post, Session } from '@nestjs/common';
+import { ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Request } from 'express';
+import { bindCallback, map } from 'rxjs';
+
+import { notLoggedInError } from '../types/dto.common';
+import {
+  AuthenticationDTO,
+  RegistrationDTO,
+  SessionDTO,
+} from '../types/dto.openapi';
+
+import { ChallengeService } from './challenge.service';
+import { UserService } from './user.service';
+
+@Controller('/api')
+export class AppController {
+  constructor(
+    private readonly challengeService: ChallengeService,
+    private readonly userService: UserService,
+  ) {}
+
+  @ApiTags('Authentication')
+  @Get('user')
+  @ApiResponse({
+    status: 200,
+    type: SessionDTO,
+    description:
+      'User session with ID and username, object will be empty if not logged in',
+  })
+  session(@Session() session: Request['session']) {
+    return {
+      user: session.user,
+      userId: session.userId,
+    };
+  }
+
+  @ApiTags('Challenge')
+  @Post('challenge')
+  @ApiResponse({
+    status: 200,
+    type: String,
+    description: 'base64url encoded random string',
+  })
+  createChallenge() {
+    return this.challengeService.create();
+  }
+
+  @ApiTags('Authentication')
+  @Post('login')
+  @ApiResponse({
+    status: 200,
+    type: Boolean,
+    description: 'Whether the user was logged in',
+  })
+  async loginUser(
+    @Body() data: AuthenticationDTO,
+    @Session() session: Request['session'],
+  ) {
+    const result = await this.userService.loginUser(data);
+    if (result) {
+      session.userId = result.id.toHexString();
+      session.user = result.username;
+    }
+    return bindCallback(session.save.bind(session))().pipe(
+      map(() => Boolean(result)),
+    );
+  }
+
+  @ApiTags('Registration')
+  @Post('user/credential')
+  @ApiResponse({
+    status: 200,
+    type: Boolean,
+    description: 'Whether the credential was added',
+  })
+  addUserCredential(
+    @Body() data: RegistrationDTO,
+    @Session() session: Request['session'],
+  ) {
+    if (!session.userId) {
+      throw notLoggedInError;
+    }
+
+    return this.userService.addPasskey(session.userId, data);
+  }
+
+  @ApiTags('Registration')
+  @Post('user')
+  @ApiResponse({
+    status: 200,
+    type: Boolean,
+    description: 'Whether the user was registered',
+  })
+  registerUser(@Body() data: RegistrationDTO) {
+    return this.userService.registerUser(data);
+  }
+
+  @ApiTags('Authentication')
+  @Post('logout')
+  logoutUser(@Session() session: Request['session']) {
+    return bindCallback(session.destroy.bind(session))().pipe(map(() => true));
+  }
+
+  @ApiTags('Secure')
+  @Get('secret')
+  @ApiUnauthorizedResponse({ description: notLoggedInError.message })
+  @ApiResponse({
+    status: 200,
+    type: String,
+    description: 'Your personal secret',
+  })
+  getSecret(@Session() session: Request['session']) {
+    if (!session.userId) {
+      throw notLoggedInError;
+    }
+
+    return this.userService.getSecret(session.userId);
+  }
+}

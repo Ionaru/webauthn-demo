@@ -14,7 +14,15 @@ export const createChallengeMutation = typedGql('mutation')({
 export const loginMutation = typedGql('mutation')({
   loginUser: [
     {
-      data: $('data', 'String!'),
+      id: $('id', 'String!'),
+      rawId: $('rawId', 'String!'),
+      response: {
+        authenticatorData: $('authenticatorData', 'String!'),
+        clientDataJSON: $('clientDataJSON', 'String!'),
+        signature: $('signature', 'String!'),
+        userHandle: $('userHandle', 'String'),
+      },
+      type: $('type', 'String!'),
     },
     true,
   ],
@@ -23,16 +31,46 @@ export const loginMutation = typedGql('mutation')({
 export const registerMutation = typedGql('mutation')({
   registerUser: [
     {
-      data: $('data', 'String!'),
+      id: $('id', 'String!'),
+      rawId: $('rawId', 'String!'),
+      response: {
+        attestationObject: $('attestationObject', 'String!'),
+        authenticatorData: $('authenticatorData', 'String!'),
+        clientDataJSON: $('clientDataJSON', 'String!'),
+        transports: $('transports', '[String!]!'),
+        publicKey: $('publicKey', 'String!'),
+        publicKeyAlgorithm: $('publicKeyAlgorithm', 'Float!'),
+      },
+      type: $('type', 'String!'),
+      user: {
+        id: $('userId', 'String!'),
+        name: $('userName', 'String!'),
+        displayName: $('userDisplayName', 'String'),
+      },
     },
     true,
   ],
 });
 
 export const addPasskeyMutation = typedGql('mutation')({
-  addPasskey: [
+  addUserCredential: [
     {
-      data: $('data', 'String!'),
+      id: $('id', 'String!'),
+      rawId: $('rawId', 'String!'),
+      response: {
+        attestationObject: $('attestationObject', 'String!'),
+        authenticatorData: $('authenticatorData', 'String!'),
+        clientDataJSON: $('clientDataJSON', 'String!'),
+        transports: $('transports', '[String!]!'),
+        publicKey: $('publicKey', 'String!'),
+        publicKeyAlgorithm: $('publicKeyAlgorithm', 'Float!'),
+      },
+      type: $('type', 'String!'),
+      user: {
+        id: $('userId', 'String!'),
+        name: $('userName', 'String!'),
+        displayName: $('userDisplayName', 'String'),
+      },
     },
     true,
   ],
@@ -40,4 +78,8 @@ export const addPasskeyMutation = typedGql('mutation')({
 
 export const logoutMutation = typedGql('mutation')({
   logoutUser: true,
+});
+
+export const secretQuery = typedGql('query')({
+  secret: true,
 });
