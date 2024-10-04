@@ -44,7 +44,7 @@ export class AppController {
   @Post('challenge')
   @ApiProduces('text/plain')
   @ApiResponse({
-    status: 200,
+    status: 201,
     type: String,
     description: 'base64url encoded random string',
   })
@@ -55,7 +55,7 @@ export class AppController {
   @ApiTags('Authentication')
   @Post('login')
   @ApiResponse({
-    status: 200,
+    status: 201,
     type: Boolean,
     description: 'Whether the user was logged in',
   })
@@ -76,7 +76,7 @@ export class AppController {
   @ApiTags('Registration')
   @Post('user/credential')
   @ApiResponse({
-    status: 200,
+    status: 201,
     type: Boolean,
     description: 'Whether the credential was added',
   })
@@ -94,7 +94,7 @@ export class AppController {
   @ApiTags('Registration')
   @Post('user')
   @ApiResponse({
-    status: 200,
+    status: 201,
     type: Boolean,
     description: 'Whether the user was registered',
   })

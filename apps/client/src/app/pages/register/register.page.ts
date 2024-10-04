@@ -73,7 +73,7 @@ export class RegisterPage {
           rawId: utils.toBase64url(credential.rawId),
           type: 'public-key',
           user: {
-            id: username,
+            id: credential.id,
             name: username,
             displayName: username,
           },
