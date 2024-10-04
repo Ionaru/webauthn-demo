@@ -29,7 +29,7 @@ export class AdminService {
       throw new HttpException('User not found', 404);
     }
 
-    user.credentials.filter((credential) => credential.id !== credentialId);
+    user.credentials = user.credentials.filter((credential) => credential.id !== credentialId);
     await (user.credentials.length === 0
       ? this.userRepository.delete(user.id)
       : this.userRepository.save(user));
