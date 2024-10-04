@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Post, Session } from '@nestjs/common';
-import { ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  ApiProduces,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Request } from 'express';
 import { bindCallback, map } from 'rxjs';
 
@@ -37,6 +42,7 @@ export class AppController {
 
   @ApiTags('Challenge')
   @Post('challenge')
+  @ApiProduces('text/plain')
   @ApiResponse({
     status: 200,
     type: String,
@@ -104,6 +110,7 @@ export class AppController {
 
   @ApiTags('Secure')
   @Get('secret')
+  @ApiProduces('text/plain')
   @ApiUnauthorizedResponse({ description: notLoggedInError.message })
   @ApiResponse({
     status: 200,
