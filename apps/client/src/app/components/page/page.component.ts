@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <section class="bg-gray-300">
       <div
-        class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen"
+        class="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen"
       >
         @if (error(); as error) {
           <div class="text-center py-4 lg:px-4">
