@@ -1,4 +1,8 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { server } from '@passwordless-id/webauthn';
 import {
@@ -28,14 +32,14 @@ export class UserService {
       'credentials.id': authentication.id,
     });
     if (!matchingUser) {
-      throw new HttpException('User not found', 404);
+      throw new NotFoundException('User not found');
     }
 
     const matchingCredential = matchingUser.credentials.find(
       (credential) => credential.id === authentication.id,
     );
     if (!matchingCredential) {
-      throw new HttpException('Credential not found', 404);
+      throw new NotFoundException('Credential not found');
     }
 
     try {
@@ -47,7 +51,7 @@ export class UserService {
         userVerified: true,
       });
     } catch {
-      throw new HttpException('Incorrect credential', 401);
+      throw new UnauthorizedException('Incorrect credential');
     }
 
     return matchingUser;
@@ -99,6 +103,21 @@ export class UserService {
     await this.userRepository.save(existingUser);
 
     return true;
+  }
+
+  checkApiKey(apiKey: string) {
+    try {
+      const userId = Buffer.from(apiKey, 'base64').toString('utf8');
+      return this.userRepository.findOneBy({
+        _id: ObjectId.createFromHexString(userId),
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  getApiKey(userId: string) {
+    return Buffer.from(userId, 'utf8').toString('base64');
   }
 
   /**

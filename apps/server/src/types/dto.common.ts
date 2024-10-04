@@ -37,4 +37,6 @@ export const descriptions: Readonly<
   type: 'The credential type, should always be "public-key"',
 };
 
-export const notLoggedInError = new UnauthorizedException('User not logged in');
+export const notLoggedInError = new UnauthorizedException(
+  'User not logged in or invalid API Key given',
+);

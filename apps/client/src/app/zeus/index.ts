@@ -1054,7 +1054,7 @@ export type ModelTypes = {
 		addUserCredential: boolean,
 	/** base64url encoded random string */
 	createChallenge: string,
-	loginUser: boolean,
+	loginUser: string,
 	logoutUser: boolean,
 	registerUser: boolean
 };
@@ -1117,7 +1117,7 @@ export type GraphQLTypes = {
 	addUserCredential: boolean,
 	/** base64url encoded random string */
 	createChallenge: string,
-	loginUser: boolean,
+	loginUser: string,
 	logoutUser: boolean,
 	registerUser: boolean
 };

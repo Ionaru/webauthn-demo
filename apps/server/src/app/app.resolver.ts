@@ -33,7 +33,7 @@ export class AppResolver {
     return this.challengeService.create();
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => String)
   async loginUser(
     @Args() queryArguments: AuthenticationDTO,
     @Context() { req: { session } }: { req: Request },
@@ -44,7 +44,7 @@ export class AppResolver {
       session.user = result.username;
     }
     return bindCallback(session.save.bind(session))().pipe(
-      map(() => Boolean(result)),
+      map(() => (result ? this.userService.getApiKey(session.userId) : '')),
     );
   }
 
@@ -73,9 +73,19 @@ export class AppResolver {
   @Query(() => String, {
     description: 'Your personal secret',
   })
-  secret(@Context() { req: { session } }: { req: Request }) {
-    if (!session.userId) {
+  async secret(@Context() { req: { headers, session } }: { req: Request }) {
+    const authorization = headers.authorization?.replace('Bearer ', '');
+    if (!authorization && !session.userId) {
       throw notLoggedInError;
+    }
+
+    if (authorization) {
+      const user = await this.userService.checkApiKey(authorization);
+      if (!user) {
+        throw notLoggedInError;
+      }
+
+      return this.userService.getSecret(user.id.toHexString());
     }
 
     return this.userService.getSecret(session.userId);

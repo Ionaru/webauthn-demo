@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Post, Session } from '@nestjs/common';
+/* eslint-disable sonarjs/no-duplicate-string */
+import { Body, Controller, Get, Post, Session, Headers } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiProduces,
   ApiResponse,
   ApiTags,
@@ -54,10 +56,11 @@ export class AppController {
 
   @ApiTags('Authentication')
   @Post('login')
+  @ApiProduces('text/plain')
   @ApiResponse({
     status: 201,
-    type: Boolean,
-    description: 'Whether the user was logged in',
+    type: String,
+    description: 'The API key for the user',
   })
   async loginUser(
     @Body() data: AuthenticationDTO,
@@ -69,7 +72,7 @@ export class AppController {
       session.user = result.username;
     }
     return bindCallback(session.save.bind(session))().pipe(
-      map(() => Boolean(result)),
+      map(() => (result ? this.userService.getApiKey(session.userId) : '')),
     );
   }
 
@@ -111,15 +114,29 @@ export class AppController {
   @ApiTags('Secure')
   @Get('secret')
   @ApiProduces('text/plain')
+  @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: notLoggedInError.message })
   @ApiResponse({
     status: 200,
     type: String,
     description: 'Your personal secret',
   })
-  getSecret(@Session() session: Request['session']) {
-    if (!session.userId) {
+  async getSecret(
+    @Session() session: Request['session'],
+    @Headers('Authorization') authorization: string,
+  ) {
+    authorization = authorization.replace('Bearer ', '');
+    if (!authorization && !session.userId) {
       throw notLoggedInError;
+    }
+
+    if (authorization) {
+      const user = await this.userService.checkApiKey(authorization);
+      if (!user) {
+        throw notLoggedInError;
+      }
+
+      return this.userService.getSecret(user.id.toHexString());
     }
 
     return this.userService.getSecret(session.userId);

@@ -68,7 +68,7 @@ type Mutation {
     The credential type, should always be "public-key"
     """
     type: String!
-  ): Boolean!
+  ): String!
   logoutUser: Boolean!
   registerUser(
     """ID of the credential, this should be created by the authenticator"""

@@ -29,7 +29,7 @@ export const ReturnTypes: Record<string,any> = {
 	Mutation:{
 		addUserCredential:"Boolean",
 		createChallenge:"String",
-		loginUser:"Boolean",
+		loginUser:"String",
 		logoutUser:"Boolean",
 		registerUser:"Boolean"
 	},

@@ -11,6 +11,7 @@ const bootstrap = async () => {
   const config = new DocumentBuilder()
     .setTitle('OpenAPI Specification')
     .setDescription('WebAuthn API')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
