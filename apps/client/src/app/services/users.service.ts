@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+import { environment } from '../../environment/environment';
+
 interface User {
   credential: string;
   username: string;
@@ -18,13 +20,13 @@ export class UsersService {
 
   getUsers() {
     this.#http
-      .get<User[]>('/admin/users')
+      .get<User[]>(`${environment.baseUrl}/admin/users`)
       .subscribe((users) => this.#users.next(users));
   }
 
   deleteCredential(credentialId: string) {
     this.#http
-      .delete(`/admin/users/${credentialId}`)
+      .delete(`${environment.baseUrl}/admin/users/${credentialId}`)
       .subscribe(() => this.getUsers());
   }
 }
