@@ -2,6 +2,12 @@
 
 This is a demo application for the [WebAuthn API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API).
 
+Specification: https://www.w3.org/TR/webauthn-2/
+
+## Workshop presentation slides
+
+https://docs.google.com/presentation/d/1ao0smbzyNDc2hl93o-s_73q5RoxOBZ8cyW-iAG-TDiY/edit?usp=sharing
+
 ## Demo
 
 The demo application is available at [https://webauthn-workshop.app](https://webauthn-workshop.app).
@@ -18,9 +24,27 @@ You can also download the schema in [JSON format](https://webauthn-workshop.app/
 
 For GraphQL, you can use the [GraphQL Playground](https://webauthn-workshop.app/graphql).
 
-## Useful tools
+## Useful tools & info
 
 - [Chrome WebAuthn Devtool](https://developer.chrome.com/docs/devtools/webauthn/)
+
+### Type corrections
+
+Typescript doesn't know what kind of data is returned from the WebAuthn API, so we have to correct the types.
+
+```ts
+const credential = await navigator.credentials.create(options) as PublicKeyCredential;
+```
+
+```ts
+// For registration
+const response = credential.response as AuthenticatorAttestationResponse;
+```
+
+```ts
+// For authentication
+const response = credential.response as AuthenticatorAssertionResponse;
+```
 
 ### Utility functions
 
