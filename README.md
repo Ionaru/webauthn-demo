@@ -34,8 +34,6 @@ export const toBase64 = (buffer: ArrayBuffer) => btoa(String.fromCodePoint(...ne
 export const toBuffer = (text: string) => Uint8Array.from(text, (c) => c.codePointAt(0)!).buffer;
 ```
 
-#### Decode
-
 ## Running the app
 
 ### Prerequisites (either)
