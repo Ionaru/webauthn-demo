@@ -37,7 +37,7 @@ type Mutation {
     user: UserDTO!
   ): Boolean!
 
-  """base64url encoded random string"""
+  """base64 encoded random string"""
   createChallenge: String!
   loginUser(
     """ID of the credential, this should be created by the authenticator"""

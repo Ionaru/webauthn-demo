@@ -908,7 +908,7 @@ export type ValueTypes = {
 	["Mutation"]: AliasType<{
 addUserCredential?: [{	/** ID of the credential, this should be created by the authenticator */
 	id: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
-	/** base64url encoded random string */
+	/** base64 encoded random string */
 	createChallenge?:boolean | `@${string}`,
 loginUser?: [{	/** ID of the credential, this should be created by the authenticator */
 	id: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAssertionResponseDTO"] | Variable<any, string>},boolean | `@${string}`],
@@ -959,7 +959,7 @@ export type ResolverInputTypes = {
 	["Mutation"]: AliasType<{
 addUserCredential?: [{	/** ID of the credential, this should be created by the authenticator */
 	id: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
-	/** base64url encoded random string */
+	/** base64 encoded random string */
 	createChallenge?:boolean | `@${string}`,
 loginUser?: [{	/** ID of the credential, this should be created by the authenticator */
 	id: string,	response: ResolverInputTypes["AuthenticatorAssertionResponseDTO"]},boolean | `@${string}`],
@@ -1014,7 +1014,7 @@ export type ModelTypes = {
 };
 	["Mutation"]: {
 		addUserCredential: boolean,
-	/** base64url encoded random string */
+	/** base64 encoded random string */
 	createChallenge: string,
 	loginUser: string,
 	logoutUser: boolean,
@@ -1067,7 +1067,7 @@ export type GraphQLTypes = {
 	["Mutation"]: {
 	__typename: "Mutation",
 	addUserCredential: boolean,
-	/** base64url encoded random string */
+	/** base64 encoded random string */
 	createChallenge: string,
 	loginUser: string,
 	logoutUser: boolean,

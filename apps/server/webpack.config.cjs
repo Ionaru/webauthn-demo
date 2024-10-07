@@ -1,4 +1,4 @@
-const { composePlugins, withNx } = require('@nrwl/webpack');
+const { composePlugins, withNx } = require('@nx/webpack');
 const nodeExternals = require('webpack-node-externals');
 
 // Nx plugins for webpack.

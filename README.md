@@ -18,6 +18,24 @@ You can also download the schema in [JSON format](https://webauthn-workshop.app/
 
 For GraphQL, you can use the [GraphQL Playground](https://webauthn-workshop.app/graphql).
 
+## Useful tools
+
+- [Chrome WebAuthn Devtool](https://developer.chrome.com/docs/devtools/webauthn/)
+
+### Utility functions
+
+These function are essential to encode/decode data when communicating with an Authenticator.
+
+```ts
+export const toBase64 = (buffer: ArrayBuffer) => btoa(String.fromCodePoint(...new Uint8Array(buffer)));
+```
+
+```ts
+export const toBuffer = (text: string) => Uint8Array.from(text, (c) => c.codePointAt(0)!).buffer;
+```
+
+#### Decode
+
 ## Running the app
 
 ### Prerequisites (either)
@@ -45,7 +63,7 @@ For GraphQL, you can use the [GraphQL Playground](https://webauthn-workshop.app/
 - Run `docker compose up` to start the application
 - Open http://localhost:80 in your browser
 
-## Mongo
+## MongoDB
 
 The application uses a mongoDB database to store the users and sessions.
 

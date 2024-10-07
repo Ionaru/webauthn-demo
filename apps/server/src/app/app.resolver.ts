@@ -32,7 +32,7 @@ export class AppResolver {
     return session;
   }
 
-  @Mutation(() => String, { description: 'base64url encoded random string' })
+  @Mutation(() => String, { description: 'base64 encoded random string' })
   createChallenge() {
     return this.challengeService.create();
   }

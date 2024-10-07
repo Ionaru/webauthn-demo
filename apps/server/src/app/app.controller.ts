@@ -52,7 +52,7 @@ export class AppController {
   @ApiResponse({
     status: 201,
     type: String,
-    description: 'base64url encoded random string',
+    description: 'base64 encoded random string',
   })
   createChallenge() {
     return this.challengeService.create();
