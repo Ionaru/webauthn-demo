@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { utils } from '@passwordless-id/webauthn';
+import { toBuffer } from './encoding';
 
 export const buildCredentialCreationOptions = (
   challenge: string,
@@ -7,7 +7,7 @@ export const buildCredentialCreationOptions = (
 ): CredentialCreationOptions => ({
   publicKey: {
     // Challenge that the authenticator must sign
-    challenge: utils.toBuffer(challenge),
+    challenge: toBuffer(challenge),
 
     // Information about Relying Party (the server)
     rp: {
@@ -47,7 +47,7 @@ export const buildCredentialCreationOptions = (
     // Info about the user that is trying to register, none of this is sent to the server
     user: {
       // A unique ID for the user record in the authenticator device
-      id: utils.toBuffer(crypto.randomUUID()),
+      id: toBuffer(crypto.randomUUID()),
       // A Duo of name fields for the user record in the authenticator device
       // Most authenticator devices will display these to the user
       // UI will be simplified when both are the same
@@ -62,7 +62,7 @@ export const buildCredentialRequestOptions = (
 ): CredentialRequestOptions => ({
   publicKey: {
     // Challenge that the authenticator must sign
-    challenge: utils.toBuffer(challenge),
+    challenge: toBuffer(challenge),
 
     // The ID of the Relying Party, will be validated on the server
     // Also acts as the "scope" of the credential

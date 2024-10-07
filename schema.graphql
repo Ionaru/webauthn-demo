@@ -3,54 +3,37 @@
 # ------------------------------------------------------
 
 input AuthenticatorAssertionResponseDTO {
-  """base64url encoded AuthenticatorAttestationResponse.authenticatorData"""
+  """base64 encoded AuthenticatorAttestationResponse.authenticatorData"""
   authenticatorData: String!
 
-  """base64url encoded AuthenticatorAttestationResponse.clientDataJSON"""
+  """base64 encoded AuthenticatorAttestationResponse.clientDataJSON"""
   clientDataJSON: String!
 
-  """base64url encoded AuthenticatorAttestationResponse.signature"""
+  """base64 encoded AuthenticatorAttestationResponse.signature"""
   signature: String!
-
-  """base64url encoded AuthenticatorAssertionResponse.userHandle"""
-  userHandle: String
 }
 
 input AuthenticatorAttestationResponseDTO {
-  """base64url encoded AuthenticatorAttestationResponse.attestationObject"""
-  attestationObject: String!
-
-  """base64url encoded AuthenticatorAttestationResponse.authenticatorData"""
+  """base64 encoded AuthenticatorAttestationResponse.authenticatorData"""
   authenticatorData: String!
 
-  """base64url encoded AuthenticatorAttestationResponse.clientDataJSON"""
+  """base64 encoded AuthenticatorAttestationResponse.clientDataJSON"""
   clientDataJSON: String!
 
-  """base64url encoded AuthenticatorAttestationResponse.getPublicKey"""
+  """base64 encoded AuthenticatorAttestationResponse.getPublicKey"""
   publicKey: String!
 
   """
-  The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number
+  The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number. This server only supports -7 (ES256) and -257 (RS256).
   """
   publicKeyAlgorithm: Float!
-
-  """AuthenticatorAttestationResponse.transports"""
-  transports: [String!]!
 }
 
 type Mutation {
   addUserCredential(
     """ID of the credential, this should be created by the authenticator"""
     id: String!
-
-    """base64url encoded version of the credential ID"""
-    rawId: String!
     response: AuthenticatorAttestationResponseDTO!
-
-    """
-    The credential type, should always be "public-key"
-    """
-    type: String!
     user: UserDTO!
   ): Boolean!
 
@@ -59,29 +42,13 @@ type Mutation {
   loginUser(
     """ID of the credential, this should be created by the authenticator"""
     id: String!
-
-    """base64url encoded version of the credential ID"""
-    rawId: String!
     response: AuthenticatorAssertionResponseDTO!
-
-    """
-    The credential type, should always be "public-key"
-    """
-    type: String!
   ): String!
   logoutUser: Boolean!
   registerUser(
     """ID of the credential, this should be created by the authenticator"""
     id: String!
-
-    """base64url encoded version of the credential ID"""
-    rawId: String!
     response: AuthenticatorAttestationResponseDTO!
-
-    """
-    The credential type, should always be "public-key"
-    """
-    type: String!
     user: UserDTO!
   ): Boolean!
 }
@@ -103,12 +70,6 @@ type SessionDTO {
 }
 
 input UserDTO {
-  """Display name of the user"""
-  displayName: String
-
-  """ID of the user"""
-  id: String!
-
   """Name of the user"""
   name: String!
 }

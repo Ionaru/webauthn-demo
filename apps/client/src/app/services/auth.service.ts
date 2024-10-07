@@ -67,13 +67,9 @@ export class AuthService {
         mutation: loginMutation,
         variables: {
           id: credential.id,
-          rawId: credential.rawId,
-          type: credential.type,
-
           authenticatorData: credential.response.authenticatorData,
           clientDataJSON: credential.response.clientDataJSON,
           signature: credential.response.signature,
-          userHandle: credential.response.userHandle ?? '',
         },
       })
       .pipe(
@@ -98,19 +94,11 @@ export class AuthService {
         mutation: registerMutation,
         variables: {
           id: credential.id,
-          rawId: credential.rawId,
-          type: credential.type,
-
-          attestationObject: credential.response.attestationObject,
           authenticatorData: credential.response.authenticatorData,
           clientDataJSON: credential.response.clientDataJSON,
-          transports: credential.response.transports,
           publicKey: credential.response.publicKey,
           publicKeyAlgorithm: credential.response.publicKeyAlgorithm,
-
-          userId: credential.user.id ?? crypto.randomUUID(),
           userName: credential.user.name,
-          userDisplayName: credential.user.displayName,
         },
       })
       .pipe(
@@ -134,19 +122,11 @@ export class AuthService {
         mutation: addPasskeyMutation,
         variables: {
           id: credential.id,
-          rawId: credential.rawId,
-          type: credential.type,
-
-          attestationObject: credential.response.attestationObject,
           authenticatorData: credential.response.authenticatorData,
           clientDataJSON: credential.response.clientDataJSON,
-          transports: credential.response.transports,
           publicKey: credential.response.publicKey,
           publicKeyAlgorithm: credential.response.publicKeyAlgorithm,
-
-          userId: credential.user.id ?? crypto.randomUUID(),
           userName: credential.user.name,
-          userDisplayName: credential.user.displayName,
         },
       })
       .pipe(

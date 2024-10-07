@@ -2,6 +2,22 @@
 
 This is a demo application for the [WebAuthn API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API).
 
+## Demo
+
+The demo application is available at [https://webauthn-workshop.app](https://webauthn-workshop.app).
+
+## API
+
+### OpenAPI / Swagger
+
+You can find the OpenAPI specification [here](https://webauthn-workshop.app/api).
+
+You can also download the schema in [JSON format](https://webauthn-workshop.app/api-json), and [YAML format](https://webauthn-workshop.app/api-yaml).
+
+### GraphQL
+
+For GraphQL, you can use the [GraphQL Playground](https://webauthn-workshop.app/graphql).
+
 ## Running the app
 
 ### Prerequisites (either)

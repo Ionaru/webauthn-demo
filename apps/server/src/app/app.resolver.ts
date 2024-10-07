@@ -1,4 +1,8 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  AuthenticationJSON,
+  RegistrationJSON,
+} from '@passwordless-id/webauthn/dist/esm/types';
 import { Request } from 'express';
 import { bindCallback, map } from 'rxjs';
 
@@ -35,10 +39,12 @@ export class AppResolver {
 
   @Mutation(() => String)
   async loginUser(
-    @Args() queryArguments: AuthenticationDTO,
+    @Args() data: AuthenticationDTO,
     @Context() { req: { session } }: { req: Request },
   ) {
-    const result = await this.userService.loginUser(queryArguments);
+    const result = await this.userService.loginUser(
+      data as unknown as AuthenticationJSON,
+    );
     if (result) {
       session.userId = result.id.toHexString();
       session.user = result.username;
@@ -50,7 +56,7 @@ export class AppResolver {
 
   @Mutation(() => Boolean)
   async addUserCredential(
-    @Args() queryArguments: RegistrationDTO,
+    @Args() data: RegistrationDTO,
     @Context() { req: { headers, session } }: { req: Request },
   ) {
     const authorization = headers.authorization?.replace('Bearer ', '');
@@ -64,15 +70,21 @@ export class AppResolver {
         throw notLoggedInError;
       }
 
-      return this.userService.getSecret(user.id.toHexString());
+      return this.userService.addPasskey(
+        user.id.toHexString(),
+        data as unknown as RegistrationJSON,
+      );
     }
 
-    return this.userService.addPasskey(session.userId, queryArguments);
+    return this.userService.addPasskey(
+      session.userId,
+      data as unknown as RegistrationJSON,
+    );
   }
 
   @Mutation(() => Boolean)
-  registerUser(@Args() queryArguments: RegistrationDTO) {
-    return this.userService.registerUser(queryArguments);
+  registerUser(@Args() data: RegistrationDTO) {
+    return this.userService.registerUser(data as unknown as RegistrationJSON);
   }
 
   @Mutation(() => Boolean)

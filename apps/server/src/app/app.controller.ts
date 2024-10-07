@@ -7,6 +7,10 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import {
+  AuthenticationJSON,
+  RegistrationJSON,
+} from '@passwordless-id/webauthn/dist/esm/types.js';
 import { Request } from 'express';
 import { bindCallback, map } from 'rxjs';
 
@@ -66,7 +70,9 @@ export class AppController {
     @Body() data: AuthenticationDTO,
     @Session() session: Request['session'],
   ) {
-    const result = await this.userService.loginUser(data);
+    const result = await this.userService.loginUser(
+      data as unknown as AuthenticationJSON,
+    );
     if (result) {
       session.userId = result.id.toHexString();
       session.user = result.username;
@@ -100,10 +106,16 @@ export class AppController {
         throw notLoggedInError;
       }
 
-      return this.userService.addPasskey(user.id.toHexString(), data);
+      return this.userService.addPasskey(
+        user.id.toHexString(),
+        data as unknown as RegistrationJSON,
+      );
     }
 
-    return this.userService.addPasskey(session.userId, data);
+    return this.userService.addPasskey(
+      session.userId,
+      data as unknown as RegistrationJSON,
+    );
   }
 
   @ApiTags('Registration')
@@ -114,7 +126,7 @@ export class AppController {
     description: 'Whether the user was registered',
   })
   registerUser(@Body() data: RegistrationDTO) {
-    return this.userService.registerUser(data);
+    return this.userService.registerUser(data as unknown as RegistrationJSON);
   }
 
   @ApiTags('Authentication')

@@ -12,21 +12,20 @@ export const descriptions: Readonly<
   RecursiveStringify<RegistrationJSON & AuthenticationJSON>
 > = {
   id: 'ID of the credential, this should be created by the authenticator',
-  rawId: 'base64url encoded version of the credential ID',
+  rawId: 'base64 encoded version of the credential ID',
   response: {
     attestationObject:
-      'base64url encoded AuthenticatorAttestationResponse.attestationObject',
+      'base64 encoded AuthenticatorAttestationResponse.attestationObject',
     authenticatorData:
-      'base64url encoded AuthenticatorAttestationResponse.authenticatorData',
+      'base64 encoded AuthenticatorAttestationResponse.authenticatorData',
     clientDataJSON:
-      'base64url encoded AuthenticatorAttestationResponse.clientDataJSON',
+      'base64 encoded AuthenticatorAttestationResponse.clientDataJSON',
     transports: ['AuthenticatorAttestationResponse.transports'],
-    publicKey:
-      'base64url encoded AuthenticatorAttestationResponse.getPublicKey',
+    publicKey: 'base64 encoded AuthenticatorAttestationResponse.getPublicKey',
     publicKeyAlgorithm:
-      'The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number',
-    signature: 'base64url encoded AuthenticatorAttestationResponse.signature',
-    userHandle: 'base64url encoded AuthenticatorAssertionResponse.userHandle',
+      'The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number. This server only supports -7 (ES256) and -257 (RS256).',
+    signature: 'base64 encoded AuthenticatorAttestationResponse.signature',
+    userHandle: 'base64 encoded AuthenticatorAssertionResponse.userHandle',
   },
   clientExtensionResults: {},
   user: {

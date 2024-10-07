@@ -888,45 +888,33 @@ type ZEUS_UNIONS = never
 
 export type ValueTypes = {
     ["AuthenticatorAssertionResponseDTO"]: {
-	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+	/** base64 encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string | Variable<any, string>,
-	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
+	/** base64 encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string | Variable<any, string>,
-	/** base64url encoded AuthenticatorAttestationResponse.signature */
-	signature: string | Variable<any, string>,
-	/** base64url encoded AuthenticatorAssertionResponse.userHandle */
-	userHandle?: string | undefined | null | Variable<any, string>
+	/** base64 encoded AuthenticatorAttestationResponse.signature */
+	signature: string | Variable<any, string>
 };
 	["AuthenticatorAttestationResponseDTO"]: {
-	/** base64url encoded AuthenticatorAttestationResponse.attestationObject */
-	attestationObject: string | Variable<any, string>,
-	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+	/** base64 encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string | Variable<any, string>,
-	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
+	/** base64 encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string | Variable<any, string>,
-	/** base64url encoded AuthenticatorAttestationResponse.getPublicKey */
+	/** base64 encoded AuthenticatorAttestationResponse.getPublicKey */
 	publicKey: string | Variable<any, string>,
-	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number */
-	publicKeyAlgorithm: number | Variable<any, string>,
-	/** AuthenticatorAttestationResponse.transports */
-	transports: Array<string> | Variable<any, string>
+	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number. This server only supports -7 (ES256) and -257 (RS256). */
+	publicKeyAlgorithm: number | Variable<any, string>
 };
 	["Mutation"]: AliasType<{
 addUserCredential?: [{	/** ID of the credential, this should be created by the authenticator */
-	id: string | Variable<any, string>,	/** base64url encoded version of the credential ID */
-	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	/** The credential type, should always be "public-key" */
-	type: string | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
+	id: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
 	/** base64url encoded random string */
 	createChallenge?:boolean | `@${string}`,
 loginUser?: [{	/** ID of the credential, this should be created by the authenticator */
-	id: string | Variable<any, string>,	/** base64url encoded version of the credential ID */
-	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAssertionResponseDTO"] | Variable<any, string>,	/** The credential type, should always be "public-key" */
-	type: string | Variable<any, string>},boolean | `@${string}`],
+	id: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAssertionResponseDTO"] | Variable<any, string>},boolean | `@${string}`],
 	logoutUser?:boolean | `@${string}`,
 registerUser?: [{	/** ID of the credential, this should be created by the authenticator */
-	id: string | Variable<any, string>,	/** base64url encoded version of the credential ID */
-	rawId: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	/** The credential type, should always be "public-key" */
-	type: string | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
+	id: string | Variable<any, string>,	response: ValueTypes["AuthenticatorAttestationResponseDTO"] | Variable<any, string>,	user: ValueTypes["UserDTO"] | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
@@ -944,10 +932,6 @@ registerUser?: [{	/** ID of the credential, this should be created by the authen
 		__typename?: boolean | `@${string}`
 }>;
 	["UserDTO"]: {
-	/** Display name of the user */
-	displayName?: string | undefined | null | Variable<any, string>,
-	/** ID of the user */
-	id: string | Variable<any, string>,
 	/** Name of the user */
 	name: string | Variable<any, string>
 }
@@ -955,45 +939,33 @@ registerUser?: [{	/** ID of the credential, this should be created by the authen
 
 export type ResolverInputTypes = {
     ["AuthenticatorAssertionResponseDTO"]: {
-	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+	/** base64 encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
-	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
+	/** base64 encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
-	/** base64url encoded AuthenticatorAttestationResponse.signature */
-	signature: string,
-	/** base64url encoded AuthenticatorAssertionResponse.userHandle */
-	userHandle?: string | undefined | null
+	/** base64 encoded AuthenticatorAttestationResponse.signature */
+	signature: string
 };
 	["AuthenticatorAttestationResponseDTO"]: {
-	/** base64url encoded AuthenticatorAttestationResponse.attestationObject */
-	attestationObject: string,
-	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+	/** base64 encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
-	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
+	/** base64 encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
-	/** base64url encoded AuthenticatorAttestationResponse.getPublicKey */
+	/** base64 encoded AuthenticatorAttestationResponse.getPublicKey */
 	publicKey: string,
-	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number */
-	publicKeyAlgorithm: number,
-	/** AuthenticatorAttestationResponse.transports */
-	transports: Array<string>
+	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number. This server only supports -7 (ES256) and -257 (RS256). */
+	publicKeyAlgorithm: number
 };
 	["Mutation"]: AliasType<{
 addUserCredential?: [{	/** ID of the credential, this should be created by the authenticator */
-	id: string,	/** base64url encoded version of the credential ID */
-	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	/** The credential type, should always be "public-key" */
-	type: string,	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
+	id: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
 	/** base64url encoded random string */
 	createChallenge?:boolean | `@${string}`,
 loginUser?: [{	/** ID of the credential, this should be created by the authenticator */
-	id: string,	/** base64url encoded version of the credential ID */
-	rawId: string,	response: ResolverInputTypes["AuthenticatorAssertionResponseDTO"],	/** The credential type, should always be "public-key" */
-	type: string},boolean | `@${string}`],
+	id: string,	response: ResolverInputTypes["AuthenticatorAssertionResponseDTO"]},boolean | `@${string}`],
 	logoutUser?:boolean | `@${string}`,
 registerUser?: [{	/** ID of the credential, this should be created by the authenticator */
-	id: string,	/** base64url encoded version of the credential ID */
-	rawId: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	/** The credential type, should always be "public-key" */
-	type: string,	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
+	id: string,	response: ResolverInputTypes["AuthenticatorAttestationResponseDTO"],	user: ResolverInputTypes["UserDTO"]},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
@@ -1011,10 +983,6 @@ registerUser?: [{	/** ID of the credential, this should be created by the authen
 		__typename?: boolean | `@${string}`
 }>;
 	["UserDTO"]: {
-	/** Display name of the user */
-	displayName?: string | undefined | null,
-	/** ID of the user */
-	id: string,
 	/** Name of the user */
 	name: string
 };
@@ -1027,28 +995,22 @@ registerUser?: [{	/** ID of the credential, this should be created by the authen
 
 export type ModelTypes = {
     ["AuthenticatorAssertionResponseDTO"]: {
-	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+	/** base64 encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
-	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
+	/** base64 encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
-	/** base64url encoded AuthenticatorAttestationResponse.signature */
-	signature: string,
-	/** base64url encoded AuthenticatorAssertionResponse.userHandle */
-	userHandle?: string | undefined
+	/** base64 encoded AuthenticatorAttestationResponse.signature */
+	signature: string
 };
 	["AuthenticatorAttestationResponseDTO"]: {
-	/** base64url encoded AuthenticatorAttestationResponse.attestationObject */
-	attestationObject: string,
-	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+	/** base64 encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
-	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
+	/** base64 encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
-	/** base64url encoded AuthenticatorAttestationResponse.getPublicKey */
+	/** base64 encoded AuthenticatorAttestationResponse.getPublicKey */
 	publicKey: string,
-	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number */
-	publicKeyAlgorithm: number,
-	/** AuthenticatorAttestationResponse.transports */
-	transports: Array<string>
+	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number. This server only supports -7 (ES256) and -257 (RS256). */
+	publicKeyAlgorithm: number
 };
 	["Mutation"]: {
 		addUserCredential: boolean,
@@ -1071,10 +1033,6 @@ export type ModelTypes = {
 	userId?: string | undefined
 };
 	["UserDTO"]: {
-	/** Display name of the user */
-	displayName?: string | undefined,
-	/** ID of the user */
-	id: string,
 	/** Name of the user */
 	name: string
 };
@@ -1089,28 +1047,22 @@ export type GraphQLTypes = {
 	// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY);
 	// ------------------------------------------------------;
 	["AuthenticatorAssertionResponseDTO"]: {
-		/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+		/** base64 encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
-	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
+	/** base64 encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
-	/** base64url encoded AuthenticatorAttestationResponse.signature */
-	signature: string,
-	/** base64url encoded AuthenticatorAssertionResponse.userHandle */
-	userHandle?: string | undefined
+	/** base64 encoded AuthenticatorAttestationResponse.signature */
+	signature: string
 };
 	["AuthenticatorAttestationResponseDTO"]: {
-		/** base64url encoded AuthenticatorAttestationResponse.attestationObject */
-	attestationObject: string,
-	/** base64url encoded AuthenticatorAttestationResponse.authenticatorData */
+		/** base64 encoded AuthenticatorAttestationResponse.authenticatorData */
 	authenticatorData: string,
-	/** base64url encoded AuthenticatorAttestationResponse.clientDataJSON */
+	/** base64 encoded AuthenticatorAttestationResponse.clientDataJSON */
 	clientDataJSON: string,
-	/** base64url encoded AuthenticatorAttestationResponse.getPublicKey */
+	/** base64 encoded AuthenticatorAttestationResponse.getPublicKey */
 	publicKey: string,
-	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number */
-	publicKeyAlgorithm: number,
-	/** AuthenticatorAttestationResponse.transports */
-	transports: Array<string>
+	/** The public key algorithm of the credential in COSEAlgorithmIdentifier format, usually a negative number. This server only supports -7 (ES256) and -257 (RS256). */
+	publicKeyAlgorithm: number
 };
 	["Mutation"]: {
 	__typename: "Mutation",
@@ -1136,11 +1088,7 @@ export type GraphQLTypes = {
 	userId?: string | undefined
 };
 	["UserDTO"]: {
-		/** Display name of the user */
-	displayName?: string | undefined,
-	/** ID of the user */
-	id: string,
-	/** Name of the user */
+		/** Name of the user */
 	name: string
 }
     }

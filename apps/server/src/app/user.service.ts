@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -58,21 +59,24 @@ export class UserService {
   }
 
   async registerUser(registration: RegistrationJSON): Promise<boolean> {
-    const registrationParsed = await server.verifyRegistration(registration, {
-      challenge: (challenge: string) =>
-        this.challengeService.check(fromBase64(challenge)),
-      origin: () => true,
-    });
+    try {
+      const registrationParsed = await server.verifyRegistration(registration, {
+        challenge: (challenge: string) =>
+          this.challengeService.check(fromBase64(challenge)),
+        origin: () => true,
+      });
 
-    const user = new User();
-    user.username = registrationParsed.user.name;
-    const credential = new Credential();
-    credential.id = registrationParsed.credential.id;
-    credential.publicKey = registrationParsed.credential.publicKey;
-    credential.algorithm = registrationParsed.credential.algorithm;
-    credential.transports = registrationParsed.credential.transports;
-    user.credentials = [credential];
-    await this.userRepository.save(user);
+      const user = new User();
+      user.username = registrationParsed.user.name;
+      const credential = new Credential();
+      credential.id = registrationParsed.credential.id;
+      credential.publicKey = registrationParsed.credential.publicKey;
+      credential.algorithm = registrationParsed.credential.algorithm;
+      user.credentials = [credential];
+      await this.userRepository.save(user);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
 
     return true;
   }
@@ -81,26 +85,29 @@ export class UserService {
     user: string,
     registration: RegistrationJSON,
   ): Promise<boolean> {
-    const registrationParsed = await server.verifyRegistration(registration, {
-      challenge: (challenge: string) =>
-        this.challengeService.check(fromBase64(challenge)),
-      origin: () => true,
-    });
+    try {
+      const registrationParsed = await server.verifyRegistration(registration, {
+        challenge: (challenge: string) =>
+          this.challengeService.check(fromBase64(challenge)),
+        origin: () => true,
+      });
 
-    const existingUser = await this.userRepository.findOneBy({
-      _id: ObjectId.createFromHexString(user),
-    });
-    if (!existingUser) {
-      throw new Error('User does not exist');
+      const existingUser = await this.userRepository.findOneBy({
+        _id: ObjectId.createFromHexString(user),
+      });
+      if (!existingUser) {
+        throw new Error('User does not exist');
+      }
+
+      const credential = new Credential();
+      credential.id = registrationParsed.credential.id;
+      credential.publicKey = registrationParsed.credential.publicKey;
+      credential.algorithm = registrationParsed.credential.algorithm;
+      existingUser.credentials.push(credential);
+      await this.userRepository.save(existingUser);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
     }
-
-    const credential = new Credential();
-    credential.id = registrationParsed.credential.id;
-    credential.publicKey = registrationParsed.credential.publicKey;
-    credential.algorithm = registrationParsed.credential.algorithm;
-    credential.transports = registrationParsed.credential.transports;
-    existingUser.credentials.push(credential);
-    await this.userRepository.save(existingUser);
 
     return true;
   }
@@ -125,30 +132,13 @@ export class UserService {
    */
   getSecret(userId: string) {
     const characters = [...userId];
-    return characters
-      .map((character) => {
-        switch (character) {
-          case '1':
-          case '2':
-          case '3':
-          case '4':
-          case '5':
-          case '7': {
-            return '0';
-          }
-          case '0':
-          case '6':
-          case '9': {
-            return '1';
-          }
-          case '8': {
-            return '2';
-          }
-          default: {
-            return '';
-          }
-        }
-      })
-      .join('');
+    const sum = characters.reduce(
+      (a, b) => a + (Number.parseInt(b, 10) || 0),
+      0,
+    );
+    const numberAmount =
+      characters.filter((c) => Boolean(Number(c))).length || 1;
+    const letterAmount = characters.length - numberAmount || 1;
+    return sum * letterAmount * numberAmount;
   }
 }
